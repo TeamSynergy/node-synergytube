@@ -1,8 +1,7 @@
 // Edit theses file to your desire and save it as config.js
-
 module.exports = {
 	server: {
-		hostname: "localhost",
+		hostname: "http://localhost",
 		port: 80,
 		session_secret: "Your secret may be here!"
 	},
@@ -14,17 +13,17 @@ module.exports = {
 		}
 	},
 	passport: {
-		// create your own app here: https://developers.facebook.com/apps
+		// If you want to disable a login-option just set it's value to false
+		// For facebook-login create an app at developers.facebook.com/apps
 		facebook: {
-			// nope, these won't work
 			clientID: '444731456390652',
-			clientSecret: '69909090438454205309227940091487',
-			// don't change this url, unless you know what you're doing
-			callbackURL: 'http://localhost/u/auth/facebook/callback'
-		}
+			clientSecret: '69909090438454205309227940091487'
+		},
+		google: true,
+		local: true
 	},
 	// For further reference see: http://mongodb.github.io/node-mongodb-native/driver-articles/mongoclient.html#the-url-connection-format
 	mongodb: "mongodb://<dbuser>:<dbpassword>@<dbhost>:<dbport>/<dbname>",
-	// setting environment to anything else than dev disables logging, caching, directory-listings
+	// setting environment to anything else than dev disables logging, caching, ..
 	environment: "dev"
 }

@@ -39,6 +39,14 @@
 			</div>
 		</div>
 	</div>
+
+	{% if flash %}
+	<div class="alert alert-warning">{{ flash }}</div>
+	{% endif %}
+
+	<div class="container">
+		{% block content %}{% endblock %}
+	</div>
 	
 	<script src="/assets/vendor/jquery/jquery.min.js"></script>
 	<script src="/assets/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
