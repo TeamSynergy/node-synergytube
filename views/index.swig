@@ -1,0 +1,13 @@
+﻿{% extends 'layout.swig' %}
+
+{% block title %}Dash · SynergyTube{% endblock %}
+
+{% block js %}
+<script src="/socket.io/socket.io.js"></script>
+<script>
+var socket = io.connect('http://localhost');
+socket.on('message', function(data){
+	console.log(data);
+});
+</script>
+{% endblock %}

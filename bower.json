@@ -1,0 +1,28 @@
+{
+  "name": "SynergyTube",
+  "version": "0.1.0",
+  "author": "Screeny <screeny05@gmail.com>",
+  "description": "SynergyTube is a foolish attempt to provide an alternative to SynchTube",
+  "keywords": [
+    "synergytube",
+    "media",
+    "synchronized",
+    "platform"
+  ],
+  "homepage": "https://github.com/TeamSynergy/SynergyTube",
+  "bugs": "https://github.com/TeamSynergy/SynergyTube/issues",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/TeamSynergy/SynergyTube.git"
+  },
+  "dependencies": {
+    "angular": "~1.0.7",
+    "jquery": "~1.9.1",
+    "angular-resource": "~1.0.7",
+    "angular-cookies": "~1.0.7",
+    "angular-sanitize": "~1.0.7",
+    "bootstrap": "~3.0.0",
+    "xmbd": "0.x",
+	"font-awesome": "4.x"
+  }
+}
