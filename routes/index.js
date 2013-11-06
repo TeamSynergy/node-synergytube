@@ -5,7 +5,6 @@ exports.index = function(req, res){
 	var r = xtend(req.user, {
 		logged_in: req.isAuthenticated()
 	});
-	console.log(r);
 	res.render('index', r);
 };
 
@@ -17,3 +16,7 @@ exports.authDestroy = function(req, res){
 	req.logout();
 	res.redirect('/');
 };
+
+exports.userCreate = function(req, res){
+	res.render('userCreate');
+}

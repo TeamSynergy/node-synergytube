@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="synergy">
 <head>
 	<title>{% block title %}Template{% endblock %}</title>
 	<meta charset="utf-8">
@@ -10,7 +10,7 @@
 	<link rel="stylesheet" href="/assets/css/main.css">
 	{% block head %}{% endblock %}
 </head>
-<body>
+<body {% block angularApp %}{% endblock %}>
 	<div class="navbar navbar-default navbar-static-top">
 		<div class="container">
 			<div class="navbar-header">
@@ -49,6 +49,7 @@
 							<input class="form-control btn-primary" type="submit" value="Login">
 						</form>
 					</li>
+					<li><a href="/u/create">Register</a></li>
 					{% endif %}
 				</ul>
 			</div>

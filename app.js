@@ -28,7 +28,6 @@ server.listen(config.server.port, function(){
 });
 
 
-
 app.set('env', config.environment == 'dev' ? 'dev' : 'production');
 app.configure('dev', function(){
 	app.use(express.favicon());
@@ -126,6 +125,7 @@ if(config.passport.local){
 app.get('/', routes.index);
 app.get('/u/auth/fail', routes.authFail);
 app.get('/u/auth/logout', routes.authDestroy);
+app.get('/u/create', routes.userCreate);
 
 
 /*app.get('/c/:channelname', routes.channel);
