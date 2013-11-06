@@ -16,9 +16,10 @@ var xtend = require('xtend');
 
 var routes = require('./routes');
 var config = require('./config');
-var sessionstore = require('./sessionstore')(express);
-var sockethandler = require('./sockethandler');
-var database = require('./database');
+var sessionstore = require('./lib/sessionstore')(express);
+var sockethandler = require('./lib/sockethandler');
+
+var database = require('./lib/database');
 var User = database.user;
 
 
@@ -99,13 +100,13 @@ if(config.passport.local){
 			if(err)
 				return done(err);
 			if(!user)
-				return done(null, false, { message: 'No User found' });
+				return done(null, false, { message: 'User not found.' });
 			if(!user.password)
-				return done(null, false, { message: 'There is no password set for this User. Try loging in via the other available Options and set the password in your Usersettings' });
+				return done(null, false, { message: 'There is no password set for this User. Try loging in via the other available Options and set the password in the Usersettings.' });
 			if(passwordHash.verify(password, user.password))
 				return done(null, user);
 			else
-				return done(null, false, { message: 'Invalid password' })
+				return done(null, false, { message: 'Invalid password.' })
 		});
 	}));
 	app.post('/u/auth/local', passport.authenticate('local', passportCallbackOptions));
@@ -114,6 +115,7 @@ if(config.passport.local){
 
 app.get('/', routes.index);
 app.get('/u/auth/fail', routes.authFail);
+app.get('/u/auth/logout', routes.authDestroy);
 
 
 /*app.get('/c/:channelname', routes.channel);

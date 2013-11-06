@@ -30,8 +30,20 @@
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> User <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="#">Logout</a></li>
-							<li><a href="#">Dunno</a></li>
+							<li><a href="/u/auth/logout">Logout</a></li>
+						</ul>
+					</li>
+					{% else %}
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Login <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="/u/auth/facebook"><i class="fa fa-facebook"></i> With Facebook</a></li>
+							<li><a href="/u/auth/google"><i class="fa fa-google-plus"></i> With Google</a></li>
+							<li class="divider"></li>
+							<li class="dropdown-header">With Password:</li>
+							<li><input type="text" name="email" placeholder="Email"></li>
+							<li><input type="password" name="password" placeholder="Password"></li>
+							<li><input type="submit"></li>
 						</ul>
 					</li>
 					{% endif %}
@@ -40,11 +52,10 @@
 		</div>
 	</div>
 
-	{% if flash %}
-	<div class="alert alert-warning">{{ flash }}</div>
-	{% endif %}
-
 	<div class="container">
+		{% if flash %}
+		<div class="alert alert-warning">{{ flash }}</div>
+		{% endif %}
 		{% block content %}{% endblock %}
 	</div>
 	
