@@ -7,6 +7,7 @@
 	
 	<link rel="stylesheet" href="/assets/vendor/bootstrap/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/assets/vendor/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/assets/css/main.css">
 	{% block head %}{% endblock %}
 </head>
 <body>
@@ -28,23 +29,25 @@
 				<ul class="nav navbar-nav navbar-right">
 					{% if logged_in %}
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> User <b class="caret"></b></a>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{display_name}} <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="/u/auth/logout">Logout</a></li>
+							<li><a href="/u/config"><i class="fa fa-fw fa-cog"></i> Account Settings</a></li>
+							<li><a href="/u/auth/logout"><i class="fa fa-fw fa-cdog"></i> Log Out</a></li>
 						</ul>
 					</li>
 					{% else %}
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Login <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li><a href="/u/auth/facebook"><i class="fa fa-facebook"></i> With Facebook</a></li>
-							<li><a href="/u/auth/google"><i class="fa fa-google-plus"></i> With Google</a></li>
-							<li class="divider"></li>
-							<li class="dropdown-header">With Password:</li>
-							<li><input type="text" name="email" placeholder="Email"></li>
-							<li><input type="password" name="password" placeholder="Password"></li>
-							<li><input type="submit"></li>
-						</ul>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Log In <b class="caret"></b></a>
+						<form action="/u/auth/local" method="post" class="dropdown-menu dropdown-login">
+							<h5>Connect with:</h5>
+							<a href="/u/auth/facebook" class="btn form-control btn-facebook"><i class="fa fa-facebook"></i> Facebook</a>
+							<a href="/u/auth/google" class="btn form-control btn-google"><i class="fa fa-google-plus"></i> Google</a>
+							<hr>
+							<h5>Login via Email:</h5>
+							<input class="form-control" type="email" name="email" placeholder="Email">
+							<input class="form-control" type="password" name="password" placeholder="Password">
+							<input class="form-control btn-primary" type="submit" value="Login">
+						</form>
 					</li>
 					{% endif %}
 				</ul>

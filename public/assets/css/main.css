@@ -1,0 +1,29 @@
+.dropdown-login{
+	padding: 0 5px;
+	width: 250px;
+}
+.dropdown-login > input{
+	margin: 5px 0;
+}
+.dropdown-login > h5{
+	color: #999;
+	font-weight: bold;
+}
+
+.btn-facebook{
+	color: #fff;
+	background-color: #3b5998;
+}
+.btn-facebook:hover{
+	color: #fff;
+	background-color: #324b80;
+}
+.btn-google{
+	color: #fff;
+	background-color: #dd4b39;
+	margin-bottom: 5px;
+}
+.btn-google:hover{
+	color: #fff;
+	background-color: #d03724;
+}

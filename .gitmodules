@@ -1,0 +1,3 @@
+[submodule "lib/passport.socketio"]
+	path = lib/passport.socketio
+	url = git@github.com:TeamSynergy/passport.socketio.git

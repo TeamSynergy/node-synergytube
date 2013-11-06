@@ -5,6 +5,7 @@ exports.index = function(req, res){
 	var r = xtend(req.user, {
 		logged_in: req.isAuthenticated()
 	});
+	console.log(r);
 	res.render('index', r);
 };
 

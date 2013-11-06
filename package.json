@@ -21,7 +21,6 @@
     "express": "~3.4.3",
     "underscore": "~1.5.2",
     "passport": "~0.1.17",
-    "passport.socketio": "~1.2.1",
     "passport-local": "~0.1.6",
     "passport-google": "~0.3.0",
     "passport-facebook": "~1.0.1",
@@ -32,7 +31,8 @@
     "connect": "~2.11.0",
     "yams": "0.x",
     "password-hash": "~1.2.1",
-    "connect-flash": "~0.1.1"
+    "connect-flash": "~0.1.1",
+    "avatars.io": "~0.1.6"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
