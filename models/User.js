@@ -1,10 +1,16 @@
 var mongoose = require('mongoose');
 var scrypt = require('js-scrypt');
 var utils = require('../lib/utils');
+var bufferEqual = require('buffer-equal');
 
 var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
+  _id: {
+    type: String,
+    unique: true,
+    default: utils.generateUID()
+  },
   display_name: {
     type: String,
     default: ''
@@ -30,14 +36,22 @@ var UserSchema = new Schema({
 
 UserSchema.methods.setLocalPassword = function(pwd, cb){
   var salt = utils.generateSalt(10);
+  var self = this;
 
   scrypt.hash(pwd, salt, function(err, hash){
     if(err)  return cb(err);
-    this.has_local = true;
-    this.password_salt = salt;
-    this.password_hash = hash;
-    return cb(null, hash);
+    User.findByIdAndUpdate(self._id, { has_local: true, password_salt: salt, password_hash: hash }, cb);
   });
 };
 
-var User = module.exports = UserSchema; //mongoose.model('User', UserSchema);
+UserSchema.methods.verifyLocalPassword = function(pwd, cb){
+  var salt = this.password_salt;
+  var self = this;
+
+  scrypt.hash(pwd, salt, function(err, hash){
+    if(err)  return cb(err);
+    cb(null, bufferEqual(self.password_hash, hash));
+  });
+}
+
+var User = module.exports = mongoose.model('User', UserSchema);

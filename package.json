@@ -35,7 +35,8 @@
     "avatars.io": "~0.1.6",
     "passport.socketio": "2.x",
     "js-scrypt": "~0.2.0",
-    "connect-redis": "~1.4.6"
+    "connect-redis": "~1.4.6",
+    "buffer-equal": "0.0.0"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

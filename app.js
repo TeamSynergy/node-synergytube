@@ -21,7 +21,7 @@ var sessionstore = require('./lib/sessionstore')(express);
 var sockethandler = require('./lib/sockethandler');
 
 var mongoose = require('mongoose');
-var User = mongoose.model('User', require('./models/User'));
+var User = require('./models/User');
 
 mongoose.connect(config.mongodb, function(){
   console.log('Connected to MongoDB');
@@ -81,7 +81,7 @@ var authUserByMail = function(mail, done){
     if(err)
       return done(err);
     if(!user)
-      return done(null, false, { message: 'User not found.' });
+      return done(null, null, { message: 'User not found.' });
     else
       return done(null, user.email);
   });
@@ -113,13 +113,17 @@ if(config.passport.local){
       if(err)
         return done(err);
       if(!user)
-        return done(null, false, { message: 'User not found.' });
-      if(!user.password)
-        return done(null, false, { message: 'There is no password set for this User. Try loging in via the other available Options and set the password in the Usersettings.' });
-      if(!passwordHash.verify(password, user.password))
-        return done(null, false, { message: 'Invalid password.' });
-      else
-        return done(null, user);
+        return done(null, null, { message: 'User not found.' });
+      if(!user.has_local)
+        return done(null, null, { message: 'There is no password set for this User. Try loging in via the other available Options and set the password in the Usersettings.' });
+      user.verifyLocalPassword(password, function(err, verified){
+        if(err)
+          return done(null, null, { message: 'There was an internal error: ' + err });
+        if(!verified)
+          return done(null, null, { message: 'Invalid password.' });
+        else
+          return done(null, user);
+      });
     });
   }));
   app.post('/u/auth/local', passport.authenticate('local', passportCallbackOptions));
@@ -127,11 +131,11 @@ if(config.passport.local){
 
 
 app.get('/', routes.index);
-app.get('/u/auth/fail', routes.authFail);
-app.get('/u/auth/logout', routes.authDestroy);
-app.post('/u/set', routes.userSet);
-app.get('/u/create', routes.userCreate);
-app.get('/u/:userid', routes.userShow);
+app.get('/u/auth/fail', routes.User.AuthFail);
+app.get('/u/auth/logout', routes.User.DestroySession);
+app.post('/u/set', routes.User.Set);
+app.get('/u/create', routes.User.Create);
+app.get('/u/:userid', routes.User.Show);
 
 
 /*app.get('/c/:channelname', routes.channel);
