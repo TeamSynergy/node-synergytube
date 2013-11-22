@@ -1,3 +1,4 @@
+var async = require('async');
 var User = require('../models/User');
 var config = require('../config');
 var utils = require('../lib/utils');
@@ -13,12 +14,15 @@ exports.DestroySession = function(req, res){
 };
 
 exports.Create = function(req, res){
-  res.render('userCreate');
+  if(!req.isAuthenticated())
+    res.render('userCreate');
+  else
+    res.redirect('/')
 }
 
 exports.Show = function(req, res){
   var data = getData(req);
-  if(data.user.logged_in && req.params.userid === data.user._id.toString())
+  if(data.user.logged_in && req.params.userid === data.user._id)
     res.render('userMe', data);
   else
     res.render('userProfile', data)
@@ -27,14 +31,25 @@ exports.Show = function(req, res){
 exports.Set = function(req, res){
   var data = getData(req, 'Sucessfully set some things!');
 
-  if(req.body.displayname){
-    User.findByIdAndUpdate(data.user._id, { display_name: req.body.displayname }, console.log);
-  }
-  if(req.body.password){
-    User.findById(data.user._id, function(err, user){
-      user.setLocalPassword(req.body.password, console.log)
-    });
-  }
-
-  res.redirect('/u/' + data.user._id.toString());
+  async.series([
+    function setDisplayname(cb){
+      if(req.body.displayname)
+        User.findByIdAndUpdate(data.user._id, { display_name: req.body.displayname }, cb);
+      else
+        cb();
+    },
+    function setPassword(cb){
+      if(req.body.password)
+        User.findById(data.user._id, function(err, user){
+          user.setLocalPassword(req.body.password, cb)
+        });
+      else
+        cb();
+    }
+  ], function(err){
+    if(err)
+      res.render('index', getData(req, err));
+    else
+      res.redirect('/u/' + data.user._id);
+  });
 }

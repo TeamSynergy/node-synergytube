@@ -31,7 +31,7 @@
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{ user.display_name }} <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="/u/{{ user._id.toString() }}"><i class="fa fa-fw fa-cog"></i> Account Settings</a></li>
+							<li><a href="/u/{{ user._id }}"><i class="fa fa-fw fa-cog"></i> Account Settings</a></li>
 							<li><a href="/u/auth/logout"><i class="fa fa-fw fa-cdog"></i> Log Out</a></li>
 						</ul>
 					</li>

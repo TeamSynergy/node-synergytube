@@ -68,7 +68,7 @@ passport.serializeUser(function(user, done){
 });
 passport.deserializeUser(function(creds, done){
   var email = (typeof creds === 'object' ? creds.email : creds);
-  User.findOne({ email: email }, done);
+  User.findOne({ email: email }, '-password_hash -password_salt', done);
 });
 
 var passportCallbackOptions = {
@@ -76,12 +76,15 @@ var passportCallbackOptions = {
   failureRedirect: '/u/auth/fail',
   failureFlash: true
 };
-var authUserByMail = function(mail, done){
+var authUserByMail = function(mail, displayname, done){
   User.findOne({ email: mail }, function(err, user){
     if(err)
       return done(err);
     if(!user)
-      return done(null, null, { message: 'User not found.' });
+      User.create({ display_name: displayname, email: mail }, function(err, user){
+        console.log('created user');
+        return done(null, user.email, { message: 'Successfuly created User' });
+      });
     else
       return done(null, user.email);
   });
@@ -90,7 +93,7 @@ if(config.passport.facebook){
   passport.use(new FacebookStrategy(xtend(config.passport.facebook, {
     callbackURL: config.server.hostname + '/u/auth/facebook/callback'
   }), function(accessToken, refreshToken, profile, done){
-    authUserByMail(normalizeMail(profile.emails[0].value), done);
+    authUserByMail(utils.normalizeMail(profile.emails[0].value), profile.displayName, done);
   }));
   app.get('/u/auth/facebook', passport.authenticate('facebook', { scope: 'email' }));
   app.get('/u/auth/facebook/callback', passport.authenticate('facebook', passportCallbackOptions));
@@ -100,7 +103,7 @@ if(config.passport.google){
     realm: config.server.hostname,
     returnURL: config.server.hostname + '/u/auth/google/callback'
   }, function(identifier, profile, done){
-    authUserByMail(normalizeMail(profile.emails[0].value), done);
+    authUserByMail(utils.normalizeMail(profile.emails[0].value), profile.displayName, done);
   }));
   app.get('/u/auth/google', passport.authenticate('google'));
   app.get('/u/auth/google/callback', passport.authenticate('google', passportCallbackOptions));
@@ -113,14 +116,14 @@ if(config.passport.local){
       if(err)
         return done(err);
       if(!user)
-        return done(null, null, { message: 'User not found.' });
+        return done(null, false, { message: 'User not found.' });
       if(!user.has_local)
-        return done(null, null, { message: 'There is no password set for this User. Try loging in via the other available Options and set the password in the Usersettings.' });
+        return done(null, false, { message: 'There is no password set for this User. Try loging in via the other available Options and set the password in the Usersettings.' });
       user.verifyLocalPassword(password, function(err, verified){
         if(err)
-          return done(null, null, { message: 'There was an internal error: ' + err });
+          return done(null, false, { message: 'There was an internal error: ' + err });
         if(!verified)
-          return done(null, null, { message: 'Invalid password.' });
+          return done(null, false, { message: 'Invalid password.' });
         else
           return done(null, user);
       });
@@ -150,8 +153,5 @@ io.sockets.on('connection', sockethandler)
 function ensureAuthenticated(req, res, next){
   if(req.isAuthenticated())
     return next();
-  res.redirect('/fail');
-}
-function normalizeMail(email){
-  return email.replace('@googlemail.com', '@gmail.com');
+  res.redirect('/u/auth/fail');
 }

@@ -17,9 +17,10 @@
     </div>
   </div>
   {% if user.has_local %}
-  <h2>There's a shirt with your name on!</h2>
+  <h3>You have a password. You can change it here:</h3>
   {% else %}
-  <h2>You currently have no local password. Set it here</h2>
+  <h3>You currently have no local password. Set it here:</h3>
+  {% endif %}
   <div class="form-group">
     <label for="inputPassword" class="col-sm-2 control-label">Set a Password</label>
     <div class="col-sm-10">
@@ -32,7 +33,6 @@
       <input class="form-control" type="password" ng-model="passwordRepeat" placeholder="Repeat it!">
     </div>
   </div>
-  {% endif %}
 
   <input type="submit" value="Change" class="btn btn-primary btn-lg pull-right">
   <div class="clearfix"></div>

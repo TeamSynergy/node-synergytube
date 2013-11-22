@@ -9,6 +9,7 @@
 	<p>In order to enjoy all features of SynergyTube (like Chat, Favourites, etc) You first have to create a User.<br>
 	You can either Log In via Facebook, Google or simply Email and Password. You also have the ability to set a password later
 	if you decide to log in with Facebook or Google now. Also you can use these methods interchangeable and won't be bound to one.</p>
+	<p>Your passwords are safe at SynergyTube.</p>
 	<p>Pssh: we won't collect any other information from your account than your name and your email!</p>
 </div>
 
@@ -38,8 +39,8 @@
 		</div>
 	</div>
 
-	<a href="/u/create/facebook" class="btn btn-facebook btn-lg"><i class="fa fa-facebook fa-lg"></i> Facebook</a>
-	<a href="/u/create/google" class="btn btn-google btn-lg"><i class="fa fa-google-plus fa-lg"></i> Google</a>
+	<a href="/u/auth/facebook" class="btn btn-facebook btn-lg"><i class="fa fa-facebook fa-lg"></i> Facebook</a>
+	<a href="/u/auth/google" class="btn btn-google btn-lg"><i class="fa fa-google-plus fa-lg"></i> Google</a>
 	<input type="submit" value="Register!" class="btn btn-primary btn-lg pull-right">
 </form>
 
