@@ -4,7 +4,7 @@
 	<title>{% block title %}Template{% endblock %}</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1">
-	
+
 	<link rel="stylesheet" href="/assets/vendor/bootstrap/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/assets/vendor/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="/assets/css/main.css">
@@ -31,7 +31,7 @@
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{display_name}} <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="/u/config"><i class="fa fa-fw fa-cog"></i> Account Settings</a></li>
+							<li><a href="/u/{{_id.toString()}}"><i class="fa fa-fw fa-cog"></i> Account Settings</a></li>
 							<li><a href="/u/auth/logout"><i class="fa fa-fw fa-cdog"></i> Log Out</a></li>
 						</ul>
 					</li>
@@ -62,7 +62,7 @@
 		{% endif %}
 		{% block content %}{% endblock %}
 	</div>
-	
+
 	<script src="/assets/vendor/jquery/jquery.min.js"></script>
 	<script src="/assets/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
 	{% block js %}{% endblock %}

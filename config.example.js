@@ -22,8 +22,16 @@ module.exports = {
 		google: true,
 		local: true
 	},
-	// For further reference see: http://mongodb.github.io/node-mongodb-native/driver-articles/mongoclient.html#the-url-connection-format
+	// For further reference see:
+	// http://mongodb.github.io/node-mongodb-native/driver-articles/mongoclient.html#the-url-connection-format
 	mongodb: "mongodb://<dbuser>:<dbpassword>@<dbhost>:<dbport>/<dbname>",
+	redis: {
+		// redis for session-caching. If you don't want/have redis
+		// just set 'redis' to false or delete it and we'll fall back
+		// to mongodb for sessio-storing. (slow)
+		host: 'localhost',
+		port: 6379
+	},
 	// setting environment to anything else than dev disables logging, caching, ..
 	environment: "dev"
 }
