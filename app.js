@@ -85,7 +85,7 @@ passport.deserializeUser(function(creds, done){
 });
 
 var passportCallbackOptions = {
-  successRedirect: '/',
+  successRedirect: 'back',
   failureRedirect: '/u/auth/fail',
   failureFlash: true
 };
