@@ -10,12 +10,12 @@ exports.AuthFail = function(req, res){
 
 exports.DestroySession = function(req, res){
   req.logout();
-  res.redirect('/');
+  res.redirect('back');
 };
 
 exports.Create = function(req, res){
   if(!req.isAuthenticated())
-    res.render('userCreate');
+    res.render('User/Create');
   else
     res.redirect('/')
 }
@@ -23,24 +23,22 @@ exports.Create = function(req, res){
 exports.Show = function(req, res){
   var data = getData(req);
   if(data.user.logged_in && req.params.userid === data.user._id)
-    res.render('userMe', data);
+    res.render('User/Me', data);
   else
-    res.render('userProfile', data)
+    res.render('User/Profile', data)
 }
 
 exports.Set = function(req, res){
-  var data = getData(req, 'Sucessfully set some things!');
-
   async.series([
     function setDisplayname(cb){
       if(req.body.displayname)
-        User.findByIdAndUpdate(data.user._id, { display_name: req.body.displayname }, cb);
+        User.findByIdAndUpdate(req.user._id, { display_name: req.body.displayname }, cb);
       else
         cb();
     },
     function setPassword(cb){
       if(req.body.password)
-        User.findById(data.user._id, function(err, user){
+        User.findById(req.user._id, function(err, user){
           user.setLocalPassword(req.body.password, cb)
         });
       else
@@ -50,6 +48,6 @@ exports.Set = function(req, res){
     if(err)
       res.render('index', getData(req, err));
     else
-      res.redirect('/u/' + data.user._id);
+      res.redirect('/u/' + req.user._id);
   });
 }

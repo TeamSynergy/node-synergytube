@@ -22,6 +22,7 @@ var sockethandler = require('./lib/sockethandler');
 
 var mongoose = require('mongoose');
 var User = require('./models/User');
+var Channel = require('./models/Channel');
 
 mongoose.connect(config.mongodb, function(){
   console.log('Connected to MongoDB');
@@ -134,24 +135,15 @@ if(config.passport.local){
 
 
 app.get('/', routes.index);
+
 app.get('/u/auth/fail', routes.User.AuthFail);
 app.get('/u/auth/logout', routes.User.DestroySession);
 app.post('/u/set', routes.User.Set);
 app.get('/u/create', routes.User.Create);
 app.get('/u/:userid', routes.User.Show);
 
+app.get('/c/:channel_string', routes.Channel.Show);
+app.get('/c/:channel_string/admin', routes.Channel.Admin);
+app.get('/c/create', routes.Channel.Create);
 
-/*app.get('/c/:channelname', routes.channel);
-app.get('/c/:channelname/config', routes.channelConfig);
-app.get('/c/create', routes.channelCreate);
-
-app.get('/u/:username', routes.user);
-app.get('/u/config', routes.userConfig);*/
-
-io.sockets.on('connection', sockethandler)
-
-function ensureAuthenticated(req, res, next){
-  if(req.isAuthenticated())
-    return next();
-  res.redirect('/u/auth/fail');
-}
+io.sockets.on('connection', sockethandler);

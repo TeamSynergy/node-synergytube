@@ -1,4 +1,4 @@
-{% extends 'layout.swig' %}
+{% extends '../layout.swig' %}
 
 {% block title %}Create User · SynergyTube{% endblock %}
 {% block angularApp %}ng-controller="ValidateCtrl"{% endblock %}

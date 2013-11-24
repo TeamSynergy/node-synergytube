@@ -3,7 +3,12 @@
 {% block title %}Dash · SynergyTube{% endblock %}
 
 {% block content %}
-<a href="#" rel="tooltip" title="first tooltip">hover over me</a>
+{% for channel in channels %}
+<div class="channel-preview">
+  <a href="/c/{{channel.short_string}}"><h3>{{channel.name}}</h3></a>
+</div>
+{% endfor %}
+
 {% endblock %}
 
 {% block js %}

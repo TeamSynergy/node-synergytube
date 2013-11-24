@@ -1,4 +1,4 @@
-{% extends 'layout.swig' %}
+{% extends '../layout.swig' %}
 
 {% block title %}My Profile · SynergyTube{% endblock %}
 
