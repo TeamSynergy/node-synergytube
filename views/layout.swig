@@ -10,7 +10,7 @@
 	<link rel="stylesheet" href="/assets/css/main.css">
 	{% block head %}{% endblock %}
 </head>
-<body {% block angularApp %}{% endblock %}>
+<body ng-controller="{% block angularApp %}{% endblock %}" {% block customdata %}{% endblock %}>
 	<div class="navbar navbar-default navbar-static-top">
 		<div class="container">
 			<div class="navbar-header">

@@ -37,4 +37,5 @@ var ChannelSchema = new Schema({
   messages: [MessageSchema]
 });
 
+
 var Channel = module.exports = mongoose.model('Channel', ChannelSchema);

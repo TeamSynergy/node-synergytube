@@ -22,10 +22,17 @@ exports.Create = function(req, res){
 
 exports.Show = function(req, res){
   var data = getData(req);
-  if(data.user.logged_in && req.params.userid === data.user._id)
-    res.render('User/Me', data);
-  else
-    res.render('User/Profile', data)
+
+  User.findById(req.params.userid, function(err, user){
+    if(err)
+      return res.render('index', getData(req, err));
+    if(!user)
+      return res.render('index', getData(req, 'User not found'));
+    if(data.user.logged_in && req.params.userid === data.user._id)
+      return res.render('User/Me', data);
+    else
+      return res.render('User/Profile', user);
+  });
 }
 
 exports.Set = function(req, res){
