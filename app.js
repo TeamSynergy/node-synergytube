@@ -18,7 +18,7 @@ var utils = require('./lib/utils');
 var routes = require('./routes');
 var config = require('./config');
 var sessionstore = require('./lib/sessionstore')(express);
-var sockethandler = require('./lib/sockethandler');
+var sockethandler = require('./lib/sockethandler')(io);
 
 var mongoose = require('mongoose');
 var User = require('./models/User');
@@ -31,6 +31,18 @@ mongoose.connect(config.mongodb, function(){
 server.listen(config.server.port, function(){
   console.log('Express server listening on port ' + config.server.port);
 });
+
+/*Channel.findOne(function(err, channel){
+  channel.playlist.push({
+    name: 'Replacer - Song for an Earth Pony',
+    media_id: 'rpRJfKcip1A',
+    provider: 'youtube',
+    position: channel.playlist.length + 1,
+    _user: '5bznyba0WYw',
+    duration: 391
+  });
+  channel.save();
+});*/
 
 
 app.set('env', config.environment == 'dev' ? 'dev' : 'production');
@@ -69,7 +81,7 @@ passport.serializeUser(function(user, done){
 });
 passport.deserializeUser(function(creds, done){
   var email = (typeof creds === 'object' ? creds.email : creds);
-  User.findOne({ email: email }, '-password_hash -password_salt', done);
+  User.findOne({ email: email }, done);
 });
 
 var passportCallbackOptions = {
@@ -113,7 +125,7 @@ if(config.passport.local){
   passport.use(new LocalStrategy({
     usernameField: 'email'
   }, function(email, password, done){
-    User.findOne({ email: email }, function(err, user){
+    User.findOne({ email: email }, '+password_hash +password_salt', function(err, user){
       if(err)
         return done(err);
       if(!user)

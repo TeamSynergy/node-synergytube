@@ -36,7 +36,8 @@
     "passport.socketio": "2.x",
     "js-scrypt": "~0.2.0",
     "connect-redis": "~1.4.6",
-    "buffer-equal": "0.0.0"
+    "buffer-equal": "0.0.0",
+    "vimeo": "~0.1.7"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

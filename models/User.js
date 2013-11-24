@@ -26,8 +26,14 @@ var UserSchema = new Schema({
     type: Boolean,
     default: false
   },
-  password_hash: Buffer,
-  password_salt: String,
+  password_hash: {
+    type: Buffer,
+    select: false
+  },
+  password_salt: {
+    type: String,
+    select: false
+  },
   register_date: {
     type: Date,
     default: new Date()

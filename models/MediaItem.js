@@ -21,7 +21,7 @@ var MediaItemSchema = module.exports = new Schema({
     required: true
   },
   _user: {
-    type: Number,
+    type: String,
     ref: 'User',
     required: true
   },
