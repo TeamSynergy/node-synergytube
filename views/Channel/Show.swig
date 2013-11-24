@@ -24,7 +24,7 @@
     <tr ng-repeat="item in playlist | orderBy:'position'">
       <td ng-bind="pad(item.position) + '.'"></td>
       <td ng-bind="item.name"></td>
-      <td ng-bind="getTime(item.duration)"></td>
+      <td ng-bind="getDuration(item.duration)"></td>
     </tr>
   </tbody>
 </table>
