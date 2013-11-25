@@ -16,13 +16,14 @@
     "url": "git://github.com/TeamSynergy/SynergyTube.git"
   },
   "dependencies": {
-    "angular": "~1.0.7",
-    "jquery": "~1.9.1",
+    "angular": "~1.2.2",
+    "angular-animate": "~1.2.2",
     "angular-resource": "~1.0.7",
     "angular-cookies": "~1.0.7",
     "angular-sanitize": "~1.0.7",
+    "jquery": "~1.9.1",
     "bootstrap": "~3.0.0",
     "xmbd": "0.x",
-	"font-awesome": "4.x"
+    "font-awesome": "4.x"
   }
 }

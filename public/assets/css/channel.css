@@ -1,0 +1,73 @@
+#player{
+  width: 100%;
+  height: 100%;
+  background: #000;
+
+  line-height: 380px;
+  color: #fff;
+  font-size: 4em;
+  text-align: center;
+}
+
+#chat{
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,15);
+}
+
+#player-chat-row{
+  height: 380px;
+}
+
+
+#controls{
+  width: 100%;
+  text-align: center;
+  font-size: 2.2em;
+  padding: 0 2px;
+  background: #F0F0F0;
+  border: 1px solid #D6D6D6;
+}
+
+#controls a{
+  padding: 8px;
+  width: 1.8em;
+  color: #474747;
+  text-decoration: none;
+  text-shadow: 0 1px 0 #fff;
+  -webkit-transition: all 150ms ease;
+     -moz-transition: all 150ms ease;
+      -ms-transition: all 150ms ease;
+       -o-transition: all 150ms ease;
+          transition: all 150ms ease;
+}
+
+#controls a:hover{
+  background: #e0e0e0;
+  border-radius: 4px;
+}
+
+#input-add,
+#input-search{
+  padding: 6px;
+  background: #F0F0F0;
+  border: 1px solid #D6D6D6;
+  border-top: none;
+}
+
+.animate-show-top{
+  overflow-y: hidden;
+  max-height: 500px;
+  -webkit-transition: all 230ms ease-in;
+     -moz-transition: all 230ms ease-in;
+      -ms-transition: all 230ms ease-in;
+       -o-transition: all 230ms ease-in;
+          transition: all 230ms ease-in;
+}
+.animate-show-top.ng-hide-add,
+.animate-show-top.ng-hide-remove{
+  display:block!important;
+}
+.animate-show-top.ng-hide{
+  max-height: 0;
+}
