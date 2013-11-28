@@ -35,18 +35,26 @@
               <li><a href="/u/auth/logout"><i class="fa fa-fw fa-cdog"></i> Log Out</a></li>
             </ul>
           </li>
-          {% else %}
+          {% else %}{# User not logged in #}
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Log In <b class="caret"></b></a>
             <form action="/u/auth/local" method="post" class="dropdown-menu dropdown-login">
-              <h5>Connect with:</h5>
-              <a href="/u/auth/facebook" class="btn form-control btn-facebook"><i class="fa fa-facebook"></i> Facebook</a>
-              <a href="/u/auth/google" class="btn form-control btn-google"><i class="fa fa-google-plus"></i> Google</a>
-              <hr>
-              <h5>Login via Email:</h5>
-              <input class="form-control" type="email" name="email" placeholder="Email">
-              <input class="form-control" type="password" name="password" placeholder="Password">
-              <input class="form-control btn-primary" type="submit" value="Login">
+              {% if ext.show_facebook || ext.show_google %}
+                <h5>Connect with:</h5>
+                {% if ext.show_facebook %}
+                  <a href="/u/auth/facebook" class="btn form-control btn-facebook"><i class="fa fa-facebook"></i> Facebook</a>
+                {% endif %}
+                {% if ext.show_google %}
+                  <a href="/u/auth/google" class="btn form-control btn-google"><i class="fa fa-google-plus"></i> Google</a>
+                {% endif %}
+                <hr>
+              {% endif %}
+              {% if ext.show_local %}
+                <h5>Login via Email:</h5>
+                <input class="form-control" type="email" name="email" placeholder="Email">
+                <input class="form-control" type="password" name="password" placeholder="Password">
+                <input class="form-control btn-primary" type="submit" value="Login">
+              {% endif %}
             </form>
           </li>
           <li><a href="/u/create">Register</a></li>

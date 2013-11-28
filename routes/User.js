@@ -1,8 +1,12 @@
 var async = require('async');
+var avaio = require('avatars.io');
 var User = require('../models/User');
 var config = require('../config');
 var utils = require('../lib/utils');
 var getData = utils.getData;
+
+avaio.appId = config.avatars_io.appID;
+avaio.accessToken = config.avatars_io.accessToken;
 
 exports.AuthFail = function(req, res){
   res.render('index', getData(req, req.flash('error')));
@@ -18,43 +22,134 @@ exports.Create = function(req, res){
     res.render('User/Create');
   else
     res.redirect('/')
-}
+};
 
 exports.Show = function(req, res){
   var data = getData(req);
 
-  User.findById(req.params.userid, function(err, user){
+  User.findById(req.params.userid, '+profiles.facebook +profiles.google +profiles.gravatar', function(err, user){
     if(err)
       return res.render('index', getData(req, err));
     if(!user)
       return res.render('index', getData(req, 'User not found'));
-    if(data.user.logged_in && req.params.userid === data.user._id)
+    if(data.user.logged_in && req.params.userid === data.user._id){
+      data.user = user;
+      data.user.logged_in = true;
+      data.user.avatar.default = config.default_avatar;
       return res.render('User/Me', data);
-    else
-      return res.render('User/Profile', user);
+    } else {
+      data.user = user;
+      return res.render('User/Profile', data);
+    }
   });
-}
+};
+
+exports.RedirectMe = function(req, res){
+  var d = getData(req);
+  if(d.user.logged_in && d.user._id)
+    res.redirect('/u/' + d.user._id);
+  else
+    res.redirect('/');
+};
 
 exports.Set = function(req, res){
-  async.series([
-    function setDisplayname(cb){
-      if(req.body.displayname)
-        User.findByIdAndUpdate(req.user._id, { display_name: req.body.displayname }, cb);
-      else
-        cb();
-    },
-    function setPassword(cb){
-      if(req.body.password)
-        User.findById(req.user._id, function(err, user){
-          user.setLocalPassword(req.body.password, cb)
-        });
-      else
-        cb();
-    }
-  ], function(err){
-    if(err)
+  if(req.form){
+    req.form.complete(function(err, fields, files){
+      if(err)
+        return res.redirect('index', getData(req, err));
+
+      async.series([
+
+        function setDisplayname(cb){
+          if(fields.displayname){
+            User.findByIdAndUpdate(req.user._id, { display_name: fields.displayname }, cb);
+          }
+          else
+            cb();
+        },
+
+        function setPassword(cb){
+          if(fields.password)
+            User.findById(req.user._id, function(err, user){
+              if(err)  return cb(err);
+              user.setLocalPassword(req.body.password, cb)
+            });
+          else
+            cb();
+        },
+
+        function setAvatar(cb){
+          if(fields.optAvatar){
+            User.findById(req.user._id, '+profiles.facebook +profiles.google +profiles.gravatar', function(err, user){
+              if(err)  return cb(err);
+              if(fields.optAvatar === 'upload' && files.avatar_image){
+                avaio.upload(files.avatar_image.path, user._id, function(err, url){
+                  if(err)  return cb(err);
+                  utils.setAvatarHelper(user, 'upload', url.replace('http://', '//') + '?size=large', cb);
+                });
+              } else {
+                switch(fields.optAvatar){
+                  case 'facebook':
+                    utils.setAvatarHelper(user, 'facebook', '//graph.facebook.com/' + user.profiles.facebook + '/picture?width=256&height=256', cb);
+                    break;
+                  case 'twitter':
+                    utils.setAvatarHelper(user, 'twitter', '//avatars.io/twitter/' + fields.twitteruser + '?size=large', cb);
+                    break;
+                  case 'gravatar':
+                    utils.setAvatarHelper(user, 'gravatar', '//secure.gravatar.com/avatar/' + user.profiles.gravatar + '?s=256&d=identicon', cb);
+                    break;
+                  default:
+                    utils.setAvatarHelper(user, 'default', config.default_avatar, cb);
+                    break;
+                }
+              }
+            });
+          }
+        },
+
+        function deleteTmpFile(cb){
+          if(files.avatar_image)
+            utils.deleteFile(files.avatar_image.path);
+          cb();
+        }
+
+      ], function(err){
+        if(err)
+          res.render('index', getData(req, err));
+        else
+          res.redirect('/u/' + req.user._id);
+      });
+    });
+  } else {
+    res.redirect('/u/' + req.user._id);
+  }
+};
+
+exports.CreateNew = function(req, res){
+  User.create(
+  {
+    display_name: req.body.displayname,
+    email: req.body.email,
+    'profiles.gravatar': utils.getMD5(req.body.email)
+  },
+
+  function(err, user){
+    if(err){
       res.render('index', getData(req, err));
-    else
-      res.redirect('/u/' + req.user._id);
+    } else {
+      // we have to explicitly set our password.
+      // TODO add virtual setter
+      user.setLocalPassword(req.body.password, function(err){
+        if(err){
+          user.remove(function(err){
+            if(err){
+              res.render('index', getData(req, err));
+            }
+          });
+        } else {
+          res.redirect('/');
+        }
+      });
+    }
   });
-}
+};

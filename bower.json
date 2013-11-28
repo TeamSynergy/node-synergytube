@@ -24,6 +24,9 @@
     "jquery": "~1.9.1",
     "bootstrap": "~3.0.0",
     "xmbd": "0.x",
-    "font-awesome": "4.x"
+    "font-awesome": "4.x",
+    "momentjs": "~2.4.0",
+    "angular-moment": "~0.5.2",
+    "angularjs-imageupload-directive": "*"
   }
 }

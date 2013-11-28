@@ -11,9 +11,9 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server, { 'browser client minification': true });
 
-var passwordHash = require('password-hash');
 var xtend = require('xtend');
 var utils = require('./lib/utils');
+var form = require('./lib/connect-form');
 
 var routes = require('./routes');
 var config = require('./config');
@@ -31,18 +31,6 @@ mongoose.connect(config.mongodb, function(){
 server.listen(config.server.port, function(){
   console.log('Express server listening on port ' + config.server.port);
 });
-
-/*Channel.findOne(function(err, channel){
-  channel.playlist.push({
-    name: 'Replacer - Song for an Earth Pony',
-    media_id: 'rpRJfKcip1A',
-    provider: 'youtube',
-    position: channel.playlist.length + 1,
-    _user: '5bznyba0WYw',
-    duration: 391
-  });
-  channel.save();
-});*/
 
 
 app.set('env', config.environment == 'dev' ? 'dev' : 'production');
@@ -89,38 +77,52 @@ var passportCallbackOptions = {
   failureRedirect: '/u/auth/fail',
   failureFlash: true
 };
-var authUserByMail = function(mail, displayname, done){
-  User.findOne({ email: mail }, function(err, user){
-    if(err)
+
+
+var authUserByMail = function(mail, displayname, fbid, ggid, done){
+  User.findAndUpdateIds(mail, fbid, ggid, function(err, user){
+    if(err){
       return done(err);
-    if(!user)
-      User.create({ display_name: displayname, email: mail }, function(err, user){
+    }
+    if(!user){
+      User.create({
+        display_name: displayname,
+        email: mail,
+        'profiles.gravatar': utils.getMD5(mail),
+        'profiles.facebook': fbid,
+        'profiles.google': ggid
+      }, function(err, user){
         console.log('created user');
         return done(null, user.email, { message: 'Successfuly created User' });
       });
-    else
+    } else {
       return done(null, user.email);
+    }
   });
 };
+
+
 if(config.passport.facebook){
   passport.use(new FacebookStrategy(xtend(config.passport.facebook, {
     callbackURL: config.server.hostname + '/u/auth/facebook/callback'
   }), function(accessToken, refreshToken, profile, done){
-    authUserByMail(utils.normalizeMail(profile.emails[0].value), profile.displayName, done);
+    authUserByMail(utils.normalizeMail(profile.emails[0].value), profile.displayName, profile.id, '', done);
   }));
   app.get('/u/auth/facebook', passport.authenticate('facebook', { scope: 'email' }));
   app.get('/u/auth/facebook/callback', passport.authenticate('facebook', passportCallbackOptions));
 }
+
 if(config.passport.google){
   passport.use(new GoogleStrategy({
     realm: config.server.hostname,
     returnURL: config.server.hostname + '/u/auth/google/callback'
   }, function(identifier, profile, done){
-    authUserByMail(utils.normalizeMail(profile.emails[0].value), profile.displayName, done);
+    authUserByMail(utils.normalizeMail(profile.emails[0].value), profile.displayName, '', identifier, done);
   }));
   app.get('/u/auth/google', passport.authenticate('google'));
   app.get('/u/auth/google/callback', passport.authenticate('google', passportCallbackOptions));
 }
+
 if(config.passport.local){
   passport.use(new LocalStrategy({
     usernameField: 'email'
@@ -143,6 +145,7 @@ if(config.passport.local){
     });
   }));
   app.post('/u/auth/local', passport.authenticate('local', passportCallbackOptions));
+  app.post('/u/create/local', routes.User.CreateNew)
 }
 
 
@@ -150,7 +153,8 @@ app.get('/', routes.index);
 
 app.get('/u/auth/fail', routes.User.AuthFail);
 app.get('/u/auth/logout', routes.User.DestroySession);
-app.post('/u/set', routes.User.Set);
+app.post('/u/set', form({ keepExtensions: true }), routes.User.Set);
+app.get('/u/set', routes.User.RedirectMe);
 app.get('/u/create', routes.User.Create);
 app.get('/u/:userid', routes.User.Show);
 

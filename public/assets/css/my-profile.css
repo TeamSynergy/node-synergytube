@@ -1,0 +1,13 @@
+#avatar{
+  width: 100%;
+  max-width: 256px;
+  margin: auto;
+  display: block;
+}
+.select-file{
+  width: 100%;
+  margin-top: 4px;
+}
+.alert{
+  padding: 10px 30px;
+}

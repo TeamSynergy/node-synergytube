@@ -1,10 +1,18 @@
 var socket = io.connect('/?channel=' + $('body').data('shortstring'));
 
-angular.module('synergy', ['ngAnimate']).controller('ChannelController', ['$scope', function($scope){
+var app = angular.module('synergy', ['ngAnimate', 'angularMoment']);
+app.config(['$interpolateProvider', function($interpolateProvider){
+  $interpolateProvider.startSymbol('#{');
+  $interpolateProvider.endSymbol('}#');
+}]);
+
+app.controller('ChannelController', ['$scope', function($scope){
   socket.on('channel.init', function(data){
     console.log(data);
-    $scope.playlist = data.playlist;
-    $scope.chat = data.messages;
+    $scope.playlist = data.channel.playlist;
+    $scope.chat = data.channel.messages;
+    $scope.users = data.users;
+
     $scope.$apply();
   });
 

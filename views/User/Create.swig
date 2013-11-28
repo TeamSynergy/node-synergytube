@@ -13,7 +13,7 @@
 	<p>Pssh: we won't collect any other information from your account than your name and your email!</p>
 </div>
 
-<form action="/u/create/local" method="post" class="form-horizontal well" ng-submit="submit()" name="newUser">
+<form action="/u/create/local" method="post" class="form-horizontal well" name="newUser">
 	<div class="form-group">
 		<label for="inputEmail" class="col-sm-2 control-label">Email</label>
 		<div class="col-sm-10">

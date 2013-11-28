@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var config = require('../config');
 var scrypt = require('js-scrypt');
 var utils = require('../lib/utils');
 var bufferEqual = require('buffer-equal');
@@ -36,7 +37,34 @@ var UserSchema = new Schema({
   },
   register_date: {
     type: Date,
-    default: new Date()
+    default: Date.now
+  },
+  avatar: {
+    url: {
+      type: String,
+      default: config.default_avatar
+    },
+    provider: {
+      type: String,
+      default: 'default'
+    }
+  },
+  profiles: {
+    facebook: {
+      type: String,
+      default: '',
+      select: false
+    },
+    google: {
+      type: String,
+      default: '',
+      select: false
+    },
+    gravatar: {
+      type: String,
+      default: '',
+      select: false
+    }
   }
 });
 
@@ -58,6 +86,43 @@ UserSchema.methods.verifyLocalPassword = function(pwd, cb){
     if(err)  return cb(err);
     cb(null, bufferEqual(self.password_hash, hash));
   });
-}
+};
+
+UserSchema.static('findAndUpdateIds', function(email, fbid, ggid, fn){
+  this.findOne({ email: email }, function(err, user){
+    if(err)
+      return fn(err);
+    if(!user)
+      return fn(null, user);
+
+    var save = false;
+    
+    if(!user.profiles.facebook && fbid){
+      save = true;
+      user.profiles.facebook = fbid;
+    }
+    if(!user.profiles.google && ggid){
+      save = true;
+      user.profiles.google = ggid;
+    }
+    if(!user.profiles.gravatar && email){
+      // When again should this happen?
+      save = true;
+      user.profiles.gravatar = utils.getMD5(email);
+    }
+
+    if(save){
+      user.save(function(err, user){
+        if(err)
+          return fn(err);
+        else
+          return fn(null, user);
+      });
+    } else {
+      return fn(null, user);
+    }
+
+  });
+});
 
 var User = module.exports = mongoose.model('User', UserSchema);

@@ -19,20 +19,29 @@
 
 
   <!-- Chat -->
-  <div class="col-md-4">
-    <div id="chat">
-      <ul class="unstyled">
+  <div class="col-md-6 row" id="chat-user-row">
+    <div class="col-md-8">
+      <ul id="chat" class="list-unstyled">
         <li ng-repeat="message in chat | orderBy:'timestamp'">
-          <span ng-bind="message.content"></span>
+          <img ng-src="#{message._user.avatar.url}#" class="img-circle">
+          <div class="bubble">
+            <p ng-bind="message.content"></p>
+            <time ng-bind="message.timestamp | date:'dd.MM HH:mm'" class="pull-right"></time>
+          </div>
         </li>
       </ul>
     </div>
-  </div>
 
 
-  <!-- Who's Online -->
-  <div class="col-md-2">
-
+    <!-- Who's Online -->
+    <div class="col-md-4">
+      <ul id="online" class="list-unstyled">
+        <li ng-repeat="user in users | orderBy:'name'">
+          <img ng-src="#{user.avatar}#" class="img-circle">
+          <p ng-bind="user.name"></p>
+        </li>
+      </ul>
+    </div>
   </div>
 </div>
 
@@ -91,9 +100,10 @@
 
 {% block js %}
 <script src="/socket.io/socket.io.js"></script>
-<script src="/assets/vendor/jquery/jquery.min.js"></script>
+<script src="/assets/vendor/moment/min/moment.min.js"></script>
 <script src="/assets/vendor/angular/angular.min.js"></script>
 <script src="/assets/vendor/angular-animate/angular-animate.min.js"></script>
+<script src="/assets/vendor/angular-moment/angular-moment.min.js"></script>
 <script src="/assets/vendor/xmbd/build/xmbd.min.js"></script>
 <script src="/assets/js/controllers/channel.js"></script>
 {% endblock %}

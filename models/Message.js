@@ -15,6 +15,6 @@ var MessageSchema = module.exports = new Schema({
   },
   timestamp: {
     type: Date,
-    default: new Date()
+    default: Date.now
   }
 });
