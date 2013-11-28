@@ -69,7 +69,7 @@ passport.serializeUser(function(user, done){
 });
 passport.deserializeUser(function(creds, done){
   var email = (typeof creds === 'object' ? creds.email : creds);
-  User.findOne({ email: email }, done);
+  User.findOne({ email: email }).lean().exec(done);
 });
 
 var passportCallbackOptions = {

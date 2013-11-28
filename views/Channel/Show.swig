@@ -3,7 +3,10 @@
 {% block title %}{{channel.name}} · SynergyTube{% endblock %}
 {% block head %}<link rel="stylesheet" href="/assets/css/channel.css">{% endblock %}
 {% block angularApp %}ChannelController{% endblock %}
-{% block customdata %}data-shortstring="{{channel.short_string}}"{% endblock %}
+{% block customdata %}
+data-shortstring="{{channel.short_string}}"
+data-user='{{JSON.stringify(user)}}'
+{% endblock %}
 
 {% block content %}
 
@@ -19,26 +22,37 @@
 
 
   <!-- Chat -->
-  <div class="col-md-6 row" id="chat-user-row">
+  <div class="col-md-6 row" id="chat-user-row" ng-class="{ hideChat: !me.logged_in }">
     <div class="col-md-8">
       <ul id="chat" class="list-unstyled">
-        <li ng-repeat="message in chat | orderBy:'timestamp'">
-          <img ng-src="#{message._user.avatar.url}#" class="img-circle">
+        <li ng-repeat="message in chat track by $index | orderBy:'timestamp'">
+          <img ng-src="#{message._user.avatar.url}#" ut-tooltip="#{message._user.display_name}#" class="img-circle">
           <div class="bubble">
-            <p ng-bind="message.content"></p>
-            <time ng-bind="message.timestamp | date:'dd.MM HH:mm'" class="pull-right"></time>
+            <p ng-bind="message.content | utUrlify"></p>
+            <time am-time-ago="message.timestamp" title="#{message.timestamp | amCalendar }#" class="pull-right"></time>
           </div>
         </li>
       </ul>
+
+      <form class="input-group" ng-submit="ui.inputMessage.submit()" ng-show="me.logged_in">
+        <input type="text" class="form-control" id="chatInput" ng-model="ui.inputMessage.text">
+        <span class="input-group-btn">
+          <a href="" class="btn btn-primary" ng-disabled="!ui.inputMessage.text"><i class="fa fa-chevron-right"></i></a>
+        </span>
+      </form>
     </div>
 
 
     <!-- Who's Online -->
     <div class="col-md-4">
       <ul id="online" class="list-unstyled">
-        <li ng-repeat="user in users | orderBy:'name'">
-          <img ng-src="#{user.avatar}#" class="img-circle">
-          <p ng-bind="user.name"></p>
+        <li ng-repeat="user in users track by $index | orderBy:'name'">
+          <a ng-href="/u/#{user._id}#">
+            <div>
+              <img ng-src="#{user.avatar}#" class="img-circle">
+              <p ng-bind="user.name"></p>
+            </div>
+          </a>
         </li>
       </ul>
     </div>
@@ -105,5 +119,6 @@
 <script src="/assets/vendor/angular-animate/angular-animate.min.js"></script>
 <script src="/assets/vendor/angular-moment/angular-moment.min.js"></script>
 <script src="/assets/vendor/xmbd/build/xmbd.min.js"></script>
+<script src="/assets/js/directives/synergy.utils.js"></script>
 <script src="/assets/js/controllers/channel.js"></script>
 {% endblock %}
