@@ -2,7 +2,16 @@
 > SynergyTube aims to provide an alternative to the now shut-down SynchTube
 
 ## Status
-Currently nothing but the login-system usable.
+### Working:
+* Loginsystem
+* Profiles
+* Playlist (basic support)
+* Chat
+
+### To be implemented:
+* Profiles (from other users)
+* Channel-Admin
+* AAAALLL the stuff, unfinished in lib/sockethandler.js
 
 ## Development
 Provide us with Issues, Pull Requests or [write us](mailto:screeny05@gmail.com).
