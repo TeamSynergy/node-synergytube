@@ -4,3 +4,6 @@
 [submodule "lib/connect-form"]
 	path = lib/connect-form
 	url = git@github.com:TeamSynergy/connect-form.git
+[submodule "public/assets/js/xmbd"]
+	path = public/assets/js/xmbd
+	url = git@github.com:screeny05/xmbd.git

@@ -19,9 +19,7 @@ exports.index = function(req, res){
 
     function populateThumbnail(channels, fn){
       async.each(channels, function(channel, next){
-        channel.playlist.sort(function(a, b){
-          return b.start_time - a.start_time;
-        });
+        channel.playlist.sort(utils.sortPlaylist);
         xmbd.getThumbnail(channel.playlist[0].provider, channel.playlist[0].media_id, function(err, thumb){
           channel.current_thumbnail = thumb;
           console.log(channel);

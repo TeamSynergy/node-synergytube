@@ -17,7 +17,7 @@ data-user='{{JSON.stringify(user)}}'
 
   <!-- Player -->
   <div class="col-md-6">
-    <div id="player">Error :(</div>
+    <div id="player" ut-xmbd="mc.current" ut-xmbd-next="mc.nextFn">Error :(</div>
   </div>
 
 
@@ -118,7 +118,8 @@ data-user='{{JSON.stringify(user)}}'
 <script src="/assets/vendor/angular/angular.min.js"></script>
 <script src="/assets/vendor/angular-animate/angular-animate.min.js"></script>
 <script src="/assets/vendor/angular-moment/angular-moment.min.js"></script>
-<script src="/assets/vendor/xmbd/build/xmbd.min.js"></script>
+<script src="/assets/vendor/swfobject/swfobject/swfobject.js"></script>
+<script src="/assets/js/xmbd/src/xmbd.js"></script>
 <script src="/assets/js/directives/synergy.utils.js"></script>
 <script src="/assets/js/controllers/channel.js"></script>
 {% endblock %}

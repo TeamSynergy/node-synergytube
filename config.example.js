@@ -33,5 +33,8 @@ module.exports = {
 		port: 6379
 	},
 	// setting environment to anything else than dev disables logging, caching, ..
-	environment: "dev"
+	environment: "dev",
+	synergy: {
+		force_sync: false
+	}
 }
