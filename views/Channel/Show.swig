@@ -17,7 +17,7 @@ data-user='{{JSON.stringify(user)}}'
 
   <!-- Player -->
   <div class="col-md-6">
-    <div id="player" ut-xmbd="mc.current" ut-xmbd-next="mc.nextFn">Error :(</div>
+    <div id="player" ut-xmbd="mc.current" ut-xmbd-next="mc.nextFn"><span class="error">Error :(</span></div>
   </div>
 
 
@@ -28,7 +28,7 @@ data-user='{{JSON.stringify(user)}}'
         <li ng-repeat="message in chat track by $index | orderBy:'timestamp'">
           <img ng-src="#{message._user.avatar.url}#" ut-tooltip="#{message._user.display_name}#" class="img-circle">
           <div class="bubble">
-            <p ng-bind="message.content | utUrlify"></p>
+            <p ng-bind-html="message.content | linky:'_blank'"></p>
             <time am-time-ago="message.timestamp" title="#{message.timestamp | amCalendar }#" class="pull-right"></time>
           </div>
         </li>
@@ -117,6 +117,7 @@ data-user='{{JSON.stringify(user)}}'
 <script src="/assets/vendor/moment/min/moment.min.js"></script>
 <script src="/assets/vendor/angular/angular.min.js"></script>
 <script src="/assets/vendor/angular-animate/angular-animate.min.js"></script>
+<script src="/assets/vendor/angular-sanitize/angular-sanitize.min.js"></script>
 <script src="/assets/vendor/angular-moment/angular-moment.min.js"></script>
 <script src="/assets/vendor/swfobject/swfobject/swfobject.js"></script>
 <script src="/assets/js/xmbd/src/xmbd.js"></script>

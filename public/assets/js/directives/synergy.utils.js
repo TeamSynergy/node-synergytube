@@ -35,13 +35,15 @@ utils.directive('utXmbd', function(){
     var updateX = function(){
       if(!x)
         x = element.xmbd();
+      else
+        x.clearEvents();
 
       if(item){
         // calculate our current position in seconds
         cueTo = (Date.now() - new Date(item.start_time).getTime()) / 1000;
         isPlaying = (cueTo < item.duration);
 
-        if(!isPlaying)  return endedFn(false);
+        if(!isPlaying)  return endedFn();
 
         x.embed({
           provider: item.provider,
@@ -57,18 +59,12 @@ utils.directive('utXmbd', function(){
         });
         x.on('vEnded', function(){
           x.unbind('vEnded');
-          endedFn(true);
+          scope.$apply(function(){
+            endedFn();
+          });
         });
       }
     };
 
   }
-});
-
-utils.filter('utUrlify', function(){
-  return function(val){
-    return val.replace(/(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/gi, function(match){
-      return '<a href="' + match + '">' + 'bla' + '</a>';
-    });
-  };
 });

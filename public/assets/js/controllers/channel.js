@@ -1,6 +1,6 @@
 var socket = io.connect('/?channel=' + $('body').data('shortstring'));
 
-var app = angular.module('synergy', ['ngAnimate', 'angularMoment', 'synergy.utils']);
+var app = angular.module('synergy', ['ngAnimate', 'ngSanitize', 'angularMoment', 'synergy.utils']);
 app.config(['$interpolateProvider', function($interpolateProvider){
   $interpolateProvider.startSymbol('#{');
   $interpolateProvider.endSymbol('}#');
@@ -8,6 +8,7 @@ app.config(['$interpolateProvider', function($interpolateProvider){
 
 app.controller('ChannelController', ['$scope', function($scope){
   $scope.me = $('body').data('user');
+  $scope.playlist = [];
 
   socket.on('channel.init', function(data){
     console.log(data);
@@ -63,30 +64,52 @@ app.controller('ChannelController', ['$scope', function($scope){
 
   // mc = mediacontroller
   $scope.mc = {
-    nextFn: function(apply){
-      socket.emit('playlist.next');
+    nextFn: function(){
       var n = $scope.mc.getNext();
       n.start_time = new Date();
       console.log('next item is:', n);
 
       $scope.mc.current = n;
-      if(apply){
-        // if apply is true, then we're in an async callback
-        // so we need to apply the new video.
-        // at least that's my theory..
-        $scope.$apply();
-      }
+      socket.emit('playlist.next', $scope.mc.current);
+    },
+    plstByPos: function(){
+      return $scope.playlist.sort(function(a, b){ return a.position - b.position });
+    },
+    getWhereId: function(_id){
+      angular.forEach($scope.playlist, function(item){
+        if(item._id === _id)
+          return _id;
+      });
+
+      return null;
     },
     getNext: function(){
       // since our playlist is sorted by position,
       // this should return the next item.
-      var byPos = $scope.playlist.sort(function(a, b){ return a.position - b.position });
+      var byPos = $scope.mc.plstByPos();
       var next = byPos[$scope.mc.current.position];
 
-      if(!next)
-        return byPos[0];
+      return next ? next : byPos[0];
+    },
+    getPrevious: function(){
+      // the same as above but the other way round
+      // Note mc.current.position is one-based. sub 2.
+      var byPos = $scope.mc.plstByPos();
+
+      var prevPos = $scope.mc.current.position - 2;
+      prevPos = prevPos >= 0 ? prevPos : $scope.playlist.length - 1;
+
+      return byPos[prevPos];
+    },
+
+    forcePlay: function(_id, apply){
+      if(typeof _id === 'object')
+        $scope.mc.current = _id;
       else
-        return next;
+        $scope.mc.current = $scope.mc.getWhereId(_id);
+
+      if(apply)
+        $scope.$apply();
     }
   };
 
