@@ -9,7 +9,7 @@ utils.directive('utTooltip', function(){
           show: 150,
           hide: 0
         },
-        placement: 'left'
+        placement: attrs.utTooltipPlacement || 'bottom'
       });
     });
   };
@@ -17,7 +17,7 @@ utils.directive('utTooltip', function(){
 
 utils.directive('utXmbd', function(){
   return function(scope, element, attrs){
-    var x;
+    window.x;
 
     var item;
     var endedFn;
@@ -33,8 +33,8 @@ utils.directive('utXmbd', function(){
     });
 
     var updateX = function(){
-      if(!x)
-        x = element.xmbd();
+      if(!window.x)
+        window.x = element.xmbd();
       else
         x.clearEvents();
 
@@ -48,7 +48,8 @@ utils.directive('utXmbd', function(){
         x.embed({
           provider: item.provider,
           id: item.media_id,
-          autoplay: true
+          autoplay: true,
+          autohide: true
         });
 
         x.on('vPlaying', function(){

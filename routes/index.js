@@ -19,10 +19,9 @@ exports.index = function(req, res){
 
     function populateThumbnail(channels, fn){
       async.each(channels, function(channel, next){
-        channel.playlist.sort(utils.sortPlaylist);
+        channel.playlist.sort(utils.sortByStarttime);
         xmbd.getThumbnail(channel.playlist[0].provider, channel.playlist[0].media_id, function(err, thumb){
           channel.current_thumbnail = thumb;
-          console.log(channel);
           next(err);
         });
       }, function(err){
@@ -33,7 +32,6 @@ exports.index = function(req, res){
   ], function onEnd(err, channels){
     var d = getData(req, err);
     d.channels = channels;
-    console.log(d);
     res.render('index', d);
   });
 };

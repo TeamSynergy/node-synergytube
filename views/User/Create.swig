@@ -46,7 +46,7 @@
 
 {% endblock %}
 
-{% block js %}
+{% block js %}{#
 <script src="/assets/vendor/angular/angular.min.js"></script>
-<script src="/assets/js/controllers/userCreateController.js"></script>
+<script src="/assets/js/controllers/userCreateController.js"></script>#}
 {% endblock %}

@@ -24,9 +24,10 @@ data-user='{{JSON.stringify(user)}}'
   <!-- Chat -->
   <div class="col-md-6 row" id="chat-user-row" ng-class="{ hideChat: !me.logged_in }">
     <div class="col-md-8">
+
       <ul id="chat" class="list-unstyled">
         <li ng-repeat="message in chat track by $index | orderBy:'timestamp'">
-          <img ng-src="#{message._user.avatar.url}#" ut-tooltip="#{message._user.display_name}#" class="img-circle">
+          <img ng-src="#{message._user.avatar.url}#" ut-tooltip="#{message._user.display_name}#" ut-tooltip-placement="left" class="img-circle">
           <div class="bubble">
             <p ng-bind-html="message.content | linky:'_blank'"></p>
             <time am-time-ago="message.timestamp" title="#{message.timestamp | amCalendar }#" class="pull-right"></time>
@@ -34,6 +35,7 @@ data-user='{{JSON.stringify(user)}}'
         </li>
       </ul>
 
+      <!-- New Message -->
       <form class="input-group" ng-submit="ui.inputMessage.submit()" ng-show="me.logged_in">
         <input type="text" class="form-control" id="chatInput" ng-model="ui.inputMessage.text">
         <span class="input-group-btn">
@@ -46,7 +48,9 @@ data-user='{{JSON.stringify(user)}}'
     <!-- Who's Online -->
     <div class="col-md-4">
       <ul id="online" class="list-unstyled">
-        <li ng-repeat="user in users track by $index | orderBy:'name'">
+
+        <!-- Actual Users -->
+        <li ng-repeat="user in users | orderBy:'name'">
           <a ng-href="/u/#{user._id}#">
             <div>
               <img ng-src="#{user.avatar}#" class="img-circle">
@@ -54,6 +58,14 @@ data-user='{{JSON.stringify(user)}}'
             </div>
           </a>
         </li>
+
+        <!-- Guests -->
+        <li ng-show="guests > 0">
+          <img src="{{default_avatar}}" class="img-circle">
+          <p ng-pluralize count="guests" when="{'one': 'One Guest', 'other': '#{guests}# Guests'}"></p>
+        </li>
+
+
       </ul>
     </div>
   </div>
@@ -63,32 +75,37 @@ data-user='{{JSON.stringify(user)}}'
 <!-- Media Controls -->
 <div id="control-panel">
   <div id="controls">
+
     <span class="pull-left">
-      <a href="" class="fa fa-heart-o"></a>
+      <a href="" class="fa fa-fw fa-heart-o" ng-show="me.logged_in" ut-tooltip="Like this channel"></a>
     </span>
 
     <span class="center">
-      <a href="" class="fa fa-backward"></a>
-      <a href="" class="fa fa-random"></a>
-      <a href="" class="fa fa-forward"></a>
+      <a href="" class="fa fw-fw fa-backward" ng-click="mc.forcePlay(mc.getPrevious())" ng-show="me.admin || me.owner" ut-tooltip="Play previous"></a>
+      <a href="" class="fa fw-fw fa-random"   ng-click="mc.forcePlay(mc.getRandom())"   ng-show="me.admin || me.owner" ut-tooltip="Play random Item"></a>
+      <a href="" class="fa fa-fw fa-forward"  ng-click="mc.forcePlay(mc.getNext())"     ng-show="me.admin || me.owner" ut-tooltip="Play next"></a>
     </span>
 
     <span class="pull-right">
-      <a href="" class="fa fa-plus"   ng-click="ui.inputAdd.toggle()"></a>
-      <a href="" class="fa fa-search" ng-click="ui.inputSearch.toggle()"></a>
+      <a href="" class="fa fa-fw fa-plus"   ng-click="ui.inputAdd.toggle()" ng-show="me.admin || me.owner" ut-tooltip="Add new item"></a>
+      <a href="" class="fa fa-fw fa-search" ng-click="ui.inputSearch.toggle()" ut-tooltip="Search for item"></a>
     </span>
+
+    <div class="clearfix"></div>
   </div>
 
+  <!-- Add a new item -->
   <form id="input-add" class="form-horizontal animate-show-top" ng-show="ui.inputAdd.show">
     <div class="input-group">
       <span class="input-group-addon">Link:</span>
-      <input type="url" class="form-control" id="inputAdd" ng-model="ui.inputAdd.text" placeholder="www.youtube.com/v/uN2X1MTwEIc">
+      <input type="url" class="form-control" id="inputAdd" ng-model="ui.inputAdd.text" placeholder="www.youtube.com/v/uN2X1MTwEIc" ng-change="ui.inputAdd.change()">
       <span class="input-group-btn">
-        <input type="submit" class="btn btn-primary" value="Add!" disabled>
+        <input type="submit" class="btn btn-primary" value="Add!" ng-disabled="!ui.inputAdd.currentItem">
       </span>
     </div>
   </form>
 
+  <!-- Search Item -->
   <form id="input-search" class="form-horizontal animate-show-top" ng-show="ui.inputSearch.show">
     <input type="text" class="form-control" id="inputSearch" ng-model="ui.inputSearch.text" placeholder="kitten, funny, pony">
   </form>
@@ -96,10 +113,11 @@ data-user='{{JSON.stringify(user)}}'
 </div>
 
 
+
 <!-- Playlist -->
 <table id="playlist" class="table">
   <tbody>
-    <tr ng-repeat="item in playlist | filter:ui.inputSearch.text | orderBy:'position'">
+    <tr ng-repeat="item in playlist | filter:ui.inputSearch.text | orderBy:'position'" ng-class="{ active: item._id == mc.current._id, selectable: me.owner || me.admin }" ng-click="mc.forcePlay(this.item, true)">
       <td ng-bind="pad(item.position) + '.'"></td>
       <td ng-bind="item.name"></td>
       <td ng-bind="getDuration(item.duration)"></td>

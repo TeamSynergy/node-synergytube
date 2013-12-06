@@ -13,8 +13,11 @@ app.controller('ChannelController', ['$scope', function($scope){
   socket.on('channel.init', function(data){
     console.log(data);
 
+    // Even if the server reloads: be sure to don't have dupe users
+    $scope.users = data.users;
+    $scope.guests = data.guests;
+
     // prevent reinit on server-reload
-    // TODO: remove in production
     if($scope.inited)  return;
     $scope.inited = true;
 
@@ -22,7 +25,10 @@ app.controller('ChannelController', ['$scope', function($scope){
     $scope.mc.current = data.channel.playlist.sort(function(a, b){ return new Date(b.start_time) - new Date(a.start_time) })[0];
 
     $scope.chat = data.channel.messages;
-    $scope.users = data.users;
+
+    // am i owner||admin?
+    $scope.me.owner = data.me.owner;
+    $scope.me.admin = data.me.admin;
 
 
     $scope.$apply();
@@ -48,6 +54,28 @@ app.controller('ChannelController', ['$scope', function($scope){
 
     if(toScroll)
       $e.animate({ scrollTop: $e[0].scrollHeight}, 200);
+  });
+
+  socket.on('guest.leave', function(){
+    // ALL HAIL CROCKFORD!
+    $scope.guests = $scope.guests - 1;
+    $scope.$apply();
+  });
+  socket.on('guest.join', function(){
+    $scope.guests = $scope.guests + 1;
+    $scope.$apply();
+  });
+  socket.on('user.leave', function(data){
+    for (var i = 0; i < $scope.users.length; i++) {
+      if($scope.users[i]._id === data._id)
+        $scope.users.splice(i, 1);
+    };
+    $scope.$apply();
+  });
+  socket.on('user.join', function(user){
+    console.log('user joined:', user.name);
+    $scope.users.push(user);
+    $scope.$apply();
   });
 
   $scope.pad = function(val){
@@ -101,21 +129,31 @@ app.controller('ChannelController', ['$scope', function($scope){
 
       return byPos[prevPos];
     },
+    getRandom: function(){
+      var r;
+      while(true){
+        r = Math.floor(Math.random() * $scope.playlist.length);
+        console.log(r);
+        if($scope.playlist[r]._id !== $scope.mc.current._id)  return $scope.playlist[r];
+      }
+    },
 
-    forcePlay: function(_id, apply){
-      if(typeof _id === 'object')
-        $scope.mc.current = _id;
-      else
-        $scope.mc.current = $scope.mc.getWhereId(_id);
+    forcePlay: function(_id, supresswarning){
+      if(!$scope.me.owner && !$scope.me.admin && !supresswarning)  return console.log('//TODO: throw error');
 
-      if(apply)
-        $scope.$apply();
+      // if id is a item, use it. else search for the id.
+      $scope.mc.current = typeof _id === 'object' ? _id : $scope.mc.getWhereId(_id);
+      $scope.mc.current.start_time = new Date();
+
+      socket.emit('playlist.play', $scope.mc.current);
     }
   };
 
   $scope.ui = {
     inputAdd: {
       show: false,
+      text: '',
+      currentItem: {},
       toggle: function(){
         this.show = !this.show;
         if(this.show){
@@ -123,6 +161,14 @@ app.controller('ChannelController', ['$scope', function($scope){
           $scope.ui.inputSearch.show = false;
           setTimeout(function(){$('#inputAdd').focus();}, 0);
         }
+      },
+      change: function(){
+        //TODO remove window.x!!
+        var inp = this.text;
+        console.log(inp);
+        var prs = x.getMediaId(inp);
+        console.log(inp, prs);
+        $scope.ui.inputAdd.currentItem = prs;
       }
     },
 

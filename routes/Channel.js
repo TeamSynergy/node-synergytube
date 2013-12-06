@@ -13,6 +13,7 @@ exports.Show = function(req, res){
 
     var d = getData(req);
     d.channel = channel;
+    d.default_avatar = config.default_avatar;
 
     res.render('Channel/Show', d);
   });

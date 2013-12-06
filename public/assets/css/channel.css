@@ -132,10 +132,6 @@
   * I actualy like it more with
   **/
 }
-#online a{
-  color: #5c5c5c;
-  font-weight: bold;
-}
 
 #online img{
   width: 20%;
@@ -144,6 +140,8 @@
 
 #online p{
   display: inline-block;
+  color: #5c5c5c;
+  font-weight: bold;
 }
 
 #controls{
@@ -204,4 +202,11 @@ table tr:first-child td{
 table{
   border: 1px solid #DBDBDB;
   border-top: none;
+}
+table .active{
+  font-weight: 700;
+  background: #eee;
+}
+table .selectable{
+  cursor: pointer;
 }
