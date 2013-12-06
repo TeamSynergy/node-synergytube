@@ -194,6 +194,7 @@
 }
 .animate-show-top.ng-hide{
   max-height: 0;
+  line-height: 0;
 }
 
 table tr:first-child td{

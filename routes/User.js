@@ -82,26 +82,27 @@ exports.Set = function(req, res){
           if(fields.optAvatar){
             User.findById(req.user._id, '+profiles.facebook +profiles.google +profiles.gravatar', function(err, user){
               if(err)  return cb(err);
-              if(fields.optAvatar === 'upload' && files.avatar_image){
-                avaio.upload(files.avatar_image.path, user._id, function(err, url){
-                  if(err)  return cb(err);
-                  utils.setAvatarHelper(user, 'upload', url.replace('http://', '//') + '?size=large', cb);
-                });
-              } else {
-                switch(fields.optAvatar){
-                  case 'facebook':
-                    utils.setAvatarHelper(user, 'facebook', '//graph.facebook.com/' + user.profiles.facebook + '/picture?width=256&height=256', cb);
-                    break;
-                  case 'twitter':
-                    utils.setAvatarHelper(user, 'twitter', '//avatars.io/twitter/' + fields.twitteruser + '?size=large', cb);
-                    break;
-                  case 'gravatar':
-                    utils.setAvatarHelper(user, 'gravatar', '//secure.gravatar.com/avatar/' + user.profiles.gravatar + '?s=256&d=identicon', cb);
-                    break;
-                  default:
-                    utils.setAvatarHelper(user, 'default', config.default_avatar, cb);
-                    break;
-                }
+
+              switch(fields.optAvatar){
+                case 'facebook':
+                  utils.setAvatarHelper(user, 'facebook', '//graph.facebook.com/' + user.profiles.facebook + '/picture?width=256&height=256', cb);
+                  break;
+                case 'twitter':
+                  utils.setAvatarHelper(user, 'twitter', '//avatars.io/twitter/' + fields.twitteruser + '?size=large', cb);
+                  break;
+                case 'gravatar':
+                  utils.setAvatarHelper(user, 'gravatar', '//secure.gravatar.com/avatar/' + user.profiles.gravatar + '?s=256&d=identicon', cb);
+                  break;
+                case 'upload':
+                  if(!files.avatar_image || files.avatar_image.size === 0)  return cb();
+                  avaio.upload(files.avatar_image.path, user._id, function(err, url){
+                    if(err)  return cb(err);
+                    utils.setAvatarHelper(user, 'upload', url.replace('http://', '//') + '?size=large', cb);
+                  });
+                  break;
+                default:
+                  utils.setAvatarHelper(user, 'default', config.default_avatar, cb);
+                  break;
               }
             });
           }

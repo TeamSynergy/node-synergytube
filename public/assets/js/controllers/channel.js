@@ -130,19 +130,29 @@ app.controller('ChannelController', ['$scope', function($scope){
       return byPos[prevPos];
     },
     getRandom: function(){
+      // some special cases needed for not crashing our app.
+      if($scope.playlist.length === 0)  return;
+      if($scope.playlist.length === 1)  return $scope.current._id;
+      if($scope.playlist.length === 2)  return $scope.mc.getNext();
+
       var r;
       while(true){
         r = Math.floor(Math.random() * $scope.playlist.length);
-        console.log(r);
         if($scope.playlist[r]._id !== $scope.mc.current._id)  return $scope.playlist[r];
       }
     },
 
     forcePlay: function(_id, supresswarning){
-      if(!$scope.me.owner && !$scope.me.admin && !supresswarning)  return console.log('//TODO: throw error');
+      if(!$scope.me.owner && !$scope.me.admin)
+        if(!supresswarning)  return console.log('//TODO: throw error');
+        else return;
 
       // if id is a item, use it. else search for the id.
-      $scope.mc.current = typeof _id === 'object' ? _id : $scope.mc.getWhereId(_id);
+      _id = typeof _id === 'object' ? _id : $scope.mc.getWhereId(_id);
+      // ignore item change if it has the same id.
+      if(_id._id === $scope.mc.current._id)  return;
+
+      $scope.mc.current = _id;
       $scope.mc.current.start_time = new Date();
 
       socket.emit('playlist.play', $scope.mc.current);
@@ -153,22 +163,27 @@ app.controller('ChannelController', ['$scope', function($scope){
     inputAdd: {
       show: false,
       text: '',
-      currentItem: {},
+      currentItem: false,
       toggle: function(){
         this.show = !this.show;
         if(this.show){
           this.text = '';
+          this.currentItem = false;
           $scope.ui.inputSearch.show = false;
           setTimeout(function(){$('#inputAdd').focus();}, 0);
         }
       },
       change: function(){
-        //TODO remove window.x!!
-        var inp = this.text;
-        console.log(inp);
+        var x   = $('#player').xmbd();
+        var inp = $scope.ui.inputAdd.text;
         var prs = x.getMediaId(inp);
-        console.log(inp, prs);
-        $scope.ui.inputAdd.currentItem = prs;
+
+        x.getMediaInfo(prs.provider, prs.id, function(data){
+          console.log(data);
+          if(!data)  return;
+          $scope.ui.inputAdd.currentItem = data;
+          $scope.$apply();
+        });
       }
     },
 

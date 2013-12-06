@@ -98,10 +98,13 @@ data-user='{{JSON.stringify(user)}}'
   <form id="input-add" class="form-horizontal animate-show-top" ng-show="ui.inputAdd.show">
     <div class="input-group">
       <span class="input-group-addon">Link:</span>
-      <input type="url" class="form-control" id="inputAdd" ng-model="ui.inputAdd.text" placeholder="www.youtube.com/v/uN2X1MTwEIc" ng-change="ui.inputAdd.change()">
+      <input type="text" class="form-control" id="inputAdd" ng-model="ui.inputAdd.text" placeholder="www.youtube.com/v/uN2X1MTwEIc" ng-change="ui.inputAdd.change()">
       <span class="input-group-btn">
         <input type="submit" class="btn btn-primary" value="Add!" ng-disabled="!ui.inputAdd.currentItem">
       </span>
+    </div>
+    <div class="info animate-show-top" ng-show="ui.inputAdd.currentItem">
+      <span ng-bind="ui.inputAdd.currentItem | json"></span>
     </div>
   </form>
 
@@ -117,7 +120,7 @@ data-user='{{JSON.stringify(user)}}'
 <!-- Playlist -->
 <table id="playlist" class="table">
   <tbody>
-    <tr ng-repeat="item in playlist | filter:ui.inputSearch.text | orderBy:'position'" ng-class="{ active: item._id == mc.current._id, selectable: me.owner || me.admin }" ng-click="mc.forcePlay(this.item, true)">
+    <tr ng-repeat="item in playlist | filter:ui.inputSearch.text | orderBy:'position'" ng-class="{ active: item._id == mc.current._id, selectable: (me.owner || me.admin) && item._id != mc.current._id }" ng-click="mc.forcePlay(this.item, true)">
       <td ng-bind="pad(item.position) + '.'"></td>
       <td ng-bind="item.name"></td>
       <td ng-bind="getDuration(item.duration)"></td>

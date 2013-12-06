@@ -17,7 +17,7 @@ utils.directive('utTooltip', function(){
 
 utils.directive('utXmbd', function(){
   return function(scope, element, attrs){
-    window.x;
+    var x;
 
     var item;
     var endedFn;
@@ -33,8 +33,8 @@ utils.directive('utXmbd', function(){
     });
 
     var updateX = function(){
-      if(!window.x)
-        window.x = element.xmbd();
+      if(!x)
+        x = element.xmbd();
       else
         x.clearEvents();
 
