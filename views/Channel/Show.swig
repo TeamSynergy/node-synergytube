@@ -95,16 +95,25 @@ data-user='{{JSON.stringify(user)}}'
   </div>
 
   <!-- Add a new item -->
-  <form id="input-add" class="form-horizontal animate-show-top" ng-show="ui.inputAdd.show">
+  <form id="input-add" class="form-horizontal animate-show-top" ng-show="ui.inputAdd.show" ng-submit="ui.inputAdd.submit()">
     <div class="input-group">
       <span class="input-group-addon">Link:</span>
       <input type="text" class="form-control" id="inputAdd" ng-model="ui.inputAdd.text" placeholder="www.youtube.com/v/uN2X1MTwEIc" ng-change="ui.inputAdd.change()">
+      <span class="input-group-addon animate-show-right" ng-show="ui.inputAdd.working"><i class="fa fa-cog fa-spin"></i></span>
       <span class="input-group-btn">
         <input type="submit" class="btn btn-primary" value="Add!" ng-disabled="!ui.inputAdd.currentItem">
       </span>
     </div>
-    <div class="info animate-show-top" ng-show="ui.inputAdd.currentItem">
-      <span ng-bind="ui.inputAdd.currentItem | json"></span>
+    <div class="info animate-show-top" ng-show="ui.inputAdd.currentItem" ng-class="{'success':ui.inputAdd.currentItem && !ui.inputAdd.warning, 'warning': ui.inputAdd.warning}">
+      <span class="success" ng-show="ui.inputAdd.currentItem && !ui.inputAdd.warning"><i class="fa fa-check"></i></span>
+      <span class="warning" ng-show="ui.inputAdd.warning"><i class="fa fa-warning"></i> <span ng-bind="ui.inputAdd.warning"></span></span>
+      <span class="name">
+        <i class="fa" ng-class="{'fa-youtube-play': ui.inputAdd.currentItem.provider == 'youtube',
+                                 'fa-vimeo-square': ui.inputAdd.currentItem.provider == 'vimeo'}"></i>
+        <span ng-bind="ui.inputAdd.currentItem.name"></span>
+      </span>
+      <span class="duration"><i class="fa fa-clock-o"></i> <span ng-bind="ui.inputAdd.currentItem.duration | duration"></span></span>
+      <div class="clearfix"></div>
     </div>
   </form>
 
@@ -120,10 +129,11 @@ data-user='{{JSON.stringify(user)}}'
 <!-- Playlist -->
 <table id="playlist" class="table">
   <tbody>
-    <tr ng-repeat="item in playlist | filter:ui.inputSearch.text | orderBy:'position'" ng-class="{ active: item._id == mc.current._id, selectable: (me.owner || me.admin) && item._id != mc.current._id }" ng-click="mc.forcePlay(this.item, true)">
-      <td ng-bind="pad(item.position) + '.'"></td>
-      <td ng-bind="item.name"></td>
-      <td ng-bind="getDuration(item.duration)"></td>
+    <tr ng-repeat="item in playlist | filter:ui.inputSearch.text | orderBy:'position'" ng-class="{ active: item._id == mc.current._id, selectable: (me.owner || me.admin) && item._id != mc.current._id }">
+      <td ng-click="mc.forcePlay(this.item, true)" ng-bind="pad(item.position) + '.'"></td>
+      <td ng-click="mc.forcePlay(this.item, true)" ng-bind="item.name"></td>
+      <td ng-click="mc.forcePlay(this.item, true)" ng-bind="item.duration | duration"></td>
+      <td ng-click="mc.remove(this.item)" class="remove" ng-show="me.owner || me.admin"><i class="fa fa-trash-o"></i></td>
     </tr>
   </tbody>
 </table>

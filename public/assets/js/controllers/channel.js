@@ -35,6 +35,13 @@ app.controller('ChannelController', ['$scope', function($scope){
     $('#chat').scrollTop($('#chat')[0].scrollHeight);
   });
 
+  socket.on('err', function(err){console.warn('server-error', err);})
+
+  socket.on('playlist.push', function(item){
+    console.log('new item', item);
+    $scope.playlist.push(item);
+    $scope.$apply();
+  });
   socket.on('playlist.play', function(item){
     console.log('force-play', item);
     $scope.mc.current = item;
@@ -82,11 +89,6 @@ app.controller('ChannelController', ['$scope', function($scope){
     return ('00' + val).slice(-2);
   };
 
-  $scope.getDuration = function(t){
-    t = new Date(t * 1000);
-    return $scope.pad(t.getMinutes()) + ":" + $scope.pad(t.getSeconds());
-  };
-
   // TODO: add proper handler
   socket.on('err', console.warn);
 
@@ -103,12 +105,19 @@ app.controller('ChannelController', ['$scope', function($scope){
     plstByPos: function(){
       return $scope.playlist.sort(function(a, b){ return a.position - b.position });
     },
+    plstContains: function(provider, id){
+      for (var i = 0; i < $scope.playlist.length; i++) {
+        if($scope.playlist[i].provider === provider && $scope.playlist[i].media_id === id)
+          return true;
+      };
+      return false;
+    },
     getWhereId: function(_id){
-      angular.forEach($scope.playlist, function(item){
-        if(item._id === _id)
-          return _id;
-      });
-
+      _id = typeof _id === 'object' ? _id._id : _id;
+      for (var i = 0; i < $scope.playlist.length; i++) {
+        if($scope.playlist[i]._id === _id)
+          return $scope.playlist[i]._id;
+      };
       return null;
     },
     getNext: function(){
@@ -144,7 +153,7 @@ app.controller('ChannelController', ['$scope', function($scope){
 
     forcePlay: function(_id, supresswarning){
       if(!$scope.me.owner && !$scope.me.admin)
-        if(!supresswarning)  return console.log('//TODO: throw error');
+        if(!supresswarning)  return console.warn('//TODO: throw error');
         else return;
 
       // if id is a item, use it. else search for the id.
@@ -156,6 +165,10 @@ app.controller('ChannelController', ['$scope', function($scope){
       $scope.mc.current.start_time = new Date();
 
       socket.emit('playlist.play', $scope.mc.current);
+    },
+    remove: function(item){
+      console.log(item);
+      socket.emit('playlist.delete', item)
     }
   };
 
@@ -164,6 +177,8 @@ app.controller('ChannelController', ['$scope', function($scope){
       show: false,
       text: '',
       currentItem: false,
+      working: false,
+      warning: false,
       toggle: function(){
         this.show = !this.show;
         if(this.show){
@@ -178,12 +193,26 @@ app.controller('ChannelController', ['$scope', function($scope){
         var inp = $scope.ui.inputAdd.text;
         var prs = x.getMediaId(inp);
 
-        x.getMediaInfo(prs.provider, prs.id, function(data){
+        $scope.ui.inputAdd.working = true;
+        $scope.ui.inputAdd.currentItem = false;
+
+        x.getMediaInfo(prs.provider, prs.id, function(err, data){
           console.log(data);
-          if(!data)  return;
-          $scope.ui.inputAdd.currentItem = data;
+          if(err)
+            $scope.ui.inputAdd.currentItem = false;
+          else
+            $scope.ui.inputAdd.currentItem = data;
+
+          $scope.ui.inputAdd.working = false;
+
+          $scope.ui.inputAdd.warning = $scope.mc.plstContains(data.provider, data.id) ? 'Duplicate' : false;
+
           $scope.$apply();
         });
+      },
+      submit: function(){
+        socket.emit('playlist.push', $scope.ui.inputAdd.currentItem);
+        $scope.ui.inputAdd.show = false;
       }
     },
 

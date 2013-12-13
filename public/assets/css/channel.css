@@ -1,6 +1,6 @@
 @media (max-width: 991px){
   div#chat-user-row{
-    padding: 0 30px;
+    margin: 0 15px;
     border: none;
   }
   div#controls a{
@@ -167,7 +167,7 @@
 }
 
 #controls a:hover{
-  background: #e0e0e0;
+  background: #E0E0E0;
   border-radius: 4px;
 }
 
@@ -179,15 +179,69 @@
   border-top: none;
 }
 
+.info{
+  margin-top: 5px;
+}
+.info.warning{
+  background: #FCF8E3;
+  color: #8A6D3B;
+  border: 1px solid #FAEBCC;
+}
+.info.success{
+  background: #D9EDF7;
+  color: #31708F;
+  border: 1px solid #BCE8F1;
+}
+.info.warning .duration{
+  border-left: 1px solid #FAEBCC;
+}
+.info.success .duration{
+  border-left: 1px solid #BCE8F1;
+}
+.info > span,
+.info > i{
+  padding: 6px 12px;
+  display: inline-block;
+}
+.info .duration{
+  float: right;
+}
+.info .name{
+  font-weight: bold;
+  color: #555;
+}
+.info .warning{
+  border-right: 1px solid #FAEBCC;
+  font-weight: bold;
+}
+.info .success{
+  border-right: 1px solid #BCE8F1;
+}
+
+.animate-show-right,
 .animate-show-top{
-  overflow-y: hidden;
-  max-height: 500px;
   -webkit-transition: all 230ms ease-in;
      -moz-transition: all 230ms ease-in;
       -ms-transition: all 230ms ease-in;
        -o-transition: all 230ms ease-in;
           transition: all 230ms ease-in;
 }
+
+.animate-show-top{
+  overflow-y: hidden;
+  max-height: 500px;
+}
+.animate-show-right{
+  overflow-x: hidden;
+  max-width: 500px;
+}
+
+
+.animate-show-right.ng-hide-add,
+.animate-show-right.ng-hide-remove{
+  display:table-cell!important;
+}
+
 .animate-show-top.ng-hide-add,
 .animate-show-top.ng-hide-remove{
   display:block!important;
@@ -195,6 +249,10 @@
 .animate-show-top.ng-hide{
   max-height: 0;
   line-height: 0;
+}
+
+.animate-show-right.ng-hide{
+  max-width: 0;
 }
 
 table tr:first-child td{
@@ -211,3 +269,13 @@ table .active{
 table .selectable{
   cursor: pointer;
 }
+table .remove{
+  border-left: 1px solid #DDD;
+  background: #FDE4E4!important;
+  border-color: #ECC1C1!important;
+  text-align: center;
+  font-size: 1.5em;
+  line-height: 1em!important;
+}
+::-moz-selection { background: #fef198; color: #000; text-shadow: none; }
+::selection { background: #fef198; color: #000; text-shadow: none; }

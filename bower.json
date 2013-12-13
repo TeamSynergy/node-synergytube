@@ -21,12 +21,11 @@
     "angular-resource": "~1.0.7",
     "angular-cookies": "~1.0.7",
     "angular-sanitize": "~1.2.3",
-    "jquery": "~1.9.1",
+    "jquery": "2.x",
     "bootstrap": "~3.0.0",
     "xmbd": "0.x",
     "font-awesome": "4.x",
     "momentjs": "~2.4.0",
-    "angular-moment": "~0.5.2",
-    "angularjs-imageupload-directive": "*"
+    "angular-moment": "~0.5.2"
   }
 }

@@ -69,3 +69,11 @@ utils.directive('utXmbd', function(){
 
   }
 });
+
+utils.filter('duration', function(){
+  var p = function(v){return ('00'+v).slice(-2);};
+  return function(t){
+    t = new Date(t * 1000);
+    return p(t.getMinutes()) + ":" + p(t.getSeconds());
+  };
+});

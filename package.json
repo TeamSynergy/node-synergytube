@@ -37,7 +37,8 @@
     "connect-redis": "~1.4.6",
     "buffer-equal": "0.0.0",
     "vimeo": "~0.1.7",
-    "formidable": "~1.0.14"
+    "formidable": "~1.0.14",
+    "request": "~2.29.0"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
