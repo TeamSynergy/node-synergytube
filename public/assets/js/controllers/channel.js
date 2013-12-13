@@ -47,6 +47,18 @@ app.controller('ChannelController', ['$scope', function($scope){
     $scope.mc.current = item;
     $scope.$apply();
   });
+  socket.on('playlist.delete', function(deleteitem){
+    console.log('remove item', deleteitem);
+    for (var i = 0; i < $scope.playlist.length; i++) {
+      if($scope.playlist[i]._id === deleteitem._id){
+        $scope.playlist.splice(i, 1);
+      }
+    };
+
+    // TODO: if no item found, force sync
+    $scope.mc.plstAlign();
+    $scope.$apply();
+  });
 
   socket.on('chat.send', function(message){
     var $e = $('#chat');
@@ -64,7 +76,7 @@ app.controller('ChannelController', ['$scope', function($scope){
   });
 
   socket.on('guest.leave', function(){
-    // ALL HAIL CROCKFORD!
+    // all hail Crockford!
     $scope.guests = $scope.guests - 1;
     $scope.$apply();
   });
@@ -167,8 +179,19 @@ app.controller('ChannelController', ['$scope', function($scope){
       socket.emit('playlist.play', $scope.mc.current);
     },
     remove: function(item){
-      console.log(item);
-      socket.emit('playlist.delete', item)
+      // we don't want two remove-processes working on the same item
+      if(item.removing)  return console.warn('item is already being removed');
+
+      item.removing = true;
+      socket.emit('playlist.delete', item);
+    },
+    plstAlign: function(){
+      $scope.playlist.sort(function(a, b){ return a.position - b.position; });
+      var cur = 1;
+      angular.forEach($scope.playlist, function(item){
+        item.position = cur;
+        cur = cur + 1;
+      });
     }
   };
 
@@ -198,7 +221,7 @@ app.controller('ChannelController', ['$scope', function($scope){
 
         x.getMediaInfo(prs.provider, prs.id, function(err, data){
           console.log(data);
-          if(err)
+          if(err || !data || !data.available)
             $scope.ui.inputAdd.currentItem = false;
           else
             $scope.ui.inputAdd.currentItem = data;
@@ -211,6 +234,9 @@ app.controller('ChannelController', ['$scope', function($scope){
         });
       },
       submit: function(){
+        // in case of something strange (eg: user invocating this method)
+        if(!$scope.ui.inputAdd.currentItem)  return;
+
         socket.emit('playlist.push', $scope.ui.inputAdd.currentItem);
         $scope.ui.inputAdd.show = false;
       }

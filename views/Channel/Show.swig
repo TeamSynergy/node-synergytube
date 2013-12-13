@@ -133,7 +133,7 @@ data-user='{{JSON.stringify(user)}}'
       <td ng-click="mc.forcePlay(this.item, true)" ng-bind="pad(item.position) + '.'"></td>
       <td ng-click="mc.forcePlay(this.item, true)" ng-bind="item.name"></td>
       <td ng-click="mc.forcePlay(this.item, true)" ng-bind="item.duration | duration"></td>
-      <td ng-click="mc.remove(this.item)" class="remove" ng-show="me.owner || me.admin"><i class="fa fa-trash-o"></i></td>
+      <td ng-click="mc.remove(item)" class="remove" ng-show="me.owner || me.admin" ng-class="{ active: item.removing }"><i class="fa" ng-class="{'fa-trash-o': !item.removing, 'fa-cog fa-spin': item.removing}"></i></td>
     </tr>
   </tbody>
 </table>
