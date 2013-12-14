@@ -74,6 +74,18 @@ app.controller('ChannelController', ['$scope', function($scope){
     if(toScroll)
       $e.animate({ scrollTop: $e[0].scrollHeight}, 200);
   });
+  socket.on('chat.more', function(messages){
+    $scope.cc.allLoaded = messages.length === 0;
+    $scope.cc.loading = false;
+
+    if($scope.cc.allLoaded) return $scope.$apply();
+
+    console.log('new messages', messages);
+    $scope.chat = $scope.chat.concat(messages);
+    $scope.cc.loading = false;
+    $scope.$apply();
+    $('#chat').scrollTop($scope.cc.scrollItem.offset().top - $('#chat').offset().top + $('#chat').scrollTop());
+  });
 
   socket.on('guest.leave', function(){
     // all hail Crockford!
@@ -97,12 +109,8 @@ app.controller('ChannelController', ['$scope', function($scope){
     $scope.$apply();
   });
 
-  $scope.pad = function(val){
-    return ('00' + val).slice(-2);
-  };
-
   // TODO: add proper handler
-  socket.on('err', console.warn);
+  socket.on('err', console.error);
 
   // mc = mediacontroller
   $scope.mc = {
@@ -264,5 +272,23 @@ app.controller('ChannelController', ['$scope', function($scope){
       }
     }
   };
+
+  // cc = ChatController
+  $scope.cc = {
+    more: function(){
+      if(!$scope.cc.loading && !$scope.cc.allLoaded){
+        // we have to use the second child, because the frst is our loading bar
+        $scope.cc.scrollItem = $($('#chat > li')[1]);
+        $scope.cc.loading = true;
+
+        var firstmessage = $scope.chat.sort(function(a, b){ return new Date(a.timestamp) - new Date(b.timestamp) })[0];
+        socket.emit('chat.more', firstmessage);
+      }
+    },
+    loading: false,
+    allLoaded: false,
+    scrollTo: 0
+  }
+
 
 }]);

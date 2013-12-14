@@ -25,8 +25,9 @@ data-user='{{JSON.stringify(user)}}'
   <div class="col-md-6 row" id="chat-user-row" ng-class="{ hideChat: !me.logged_in }">
     <div class="col-md-8">
 
-      <ul id="chat" class="list-unstyled">
-        <li ng-repeat="message in chat track by $index | orderBy:'timestamp'">
+      <ul id="chat" class="list-unstyled" ut-scroll-top="cc.more">
+        <li class="loadmore" ng-show="cc.loading && !cc.allLoaded"><i class="fa fa-cog fa-spin"></i> Loading...</li>
+        <li ng-repeat="message in chat | orderBy:'timestamp'">
           <img ng-src="#{message._user.avatar.url}#" ut-tooltip="#{message._user.display_name}#" ut-tooltip-placement="left" class="img-circle">
           <div class="bubble">
             <p ng-bind-html="message.content | linky:'_blank'"></p>
@@ -130,7 +131,7 @@ data-user='{{JSON.stringify(user)}}'
 <table id="playlist" class="table">
   <tbody>
     <tr ng-repeat="item in playlist | filter:ui.inputSearch.text | orderBy:'position'" ng-class="{ active: item._id == mc.current._id, selectable: (me.owner || me.admin) && item._id != mc.current._id }">
-      <td ng-click="mc.forcePlay(this.item, true)" ng-bind="pad(item.position) + '.'"></td>
+      <td ng-click="mc.forcePlay(this.item, true)" ng-bind="item.position | pad:2:'.'"></td>
       <td ng-click="mc.forcePlay(this.item, true)" ng-bind="item.name"></td>
       <td ng-click="mc.forcePlay(this.item, true)" ng-bind="item.duration | duration"></td>
       <td ng-click="mc.remove(item)" class="remove" ng-show="me.owner || me.admin" ng-class="{ active: item.removing }"><i class="fa" ng-class="{'fa-trash-o': !item.removing, 'fa-cog fa-spin': item.removing}"></i></td>

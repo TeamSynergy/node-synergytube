@@ -60,9 +60,7 @@ utils.directive('utXmbd', function(){
         });
         x.on('vEnded', function(){
           x.unbind('vEnded');
-          scope.$apply(function(){
-            endedFn();
-          });
+          scope.$apply(endedFn);
         });
       }
     };
@@ -70,11 +68,37 @@ utils.directive('utXmbd', function(){
   }
 });
 
+utils.directive('utScrollTop', function(){
+  return function(scope, element, attrs){
+    var fn = attrs.utScrollTop;
+    var raw = element[0];
+
+    scope.$watch(attrs.utScrollTop, function(f){
+      fn = f;
+    });
+
+
+    element.bind('scroll', function(){
+      if(raw.scrollTop <= 0)
+        scope.$apply(fn);
+      });
+    }
+});
+
 utils.filter('duration', function(){
   var p = function(v){return ('00'+v).slice(-2);};
   return function(t){
     t = new Date(t * 1000);
     return p(t.getMinutes()) + ":" + p(t.getSeconds());
+  };
+});
+
+utils.filter('pad', function(){
+  return function pad(val, len, append){
+    len = len || 2;
+    var pad = '';
+    while(pad.length<len-(val+'').length)pad=pad+'0';
+    return pad + val + append || '';
   };
 });
 

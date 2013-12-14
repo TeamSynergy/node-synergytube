@@ -53,6 +53,13 @@
   padding: 6px 5px;
   height: 346px !important;
 }
+#chat .loadmore {
+  text-align: center;
+  border-bottom: 1px solid #E6E6E6;
+  padding-bottom: 5px;
+  color: #797979;
+  font-size: 1.2em;
+}
 #chatInput{
   margin-left: -1px;
   border-bottom-width: 0;
