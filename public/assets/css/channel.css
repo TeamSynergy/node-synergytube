@@ -262,8 +262,13 @@
   max-width: 0;
 }
 
-#playlist tr:first-child td{
+#playlist tr{
+  border: 1px solid #ddd;
   border-top: none;
+}
+#playlist td{
+  border-top: none;
+  border-bottom: none;
 }
 #playlist{
   border: 1px solid #DBDBDB;
@@ -298,6 +303,10 @@
   border-color: #ddd!important;
   background: #f5f5f5!important;
   color: #c0c0c0;
+}
+#playlist .ui-sortable-helper{
+  background: #fff;
+  border: 1px solid #ddd;
 }
 ::-moz-selection { background: #fef198; color: #000; text-shadow: none; }
 ::selection { background: #fef198; color: #000; text-shadow: none; }

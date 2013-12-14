@@ -7,3 +7,11 @@
 [submodule "public/assets/js/xmbd"]
 	path = public/assets/js/xmbd
 	url = git@github.com:screeny05/xmbd.git
+[submodule "ui-sortable"]
+	path = ui-sortable
+	url = git@github.com:angular-ui/ui-sortable.git
+	branch = angular1.2
+[submodule "public/assets/js/ui-sortable"]
+	path = public/assets/js/ui-sortable
+	url = git@github.com:angular-ui/ui-sortable.git
+	branch = angular1.2

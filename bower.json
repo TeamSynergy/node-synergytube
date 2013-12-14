@@ -26,6 +26,7 @@
     "xmbd": "0.x",
     "font-awesome": "4.x",
     "momentjs": "~2.4.0",
-    "angular-moment": "~0.5.2"
+    "angular-moment": "~0.5.2",
+    "jquery-ui": "~1.10.3"
   }
 }

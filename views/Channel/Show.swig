@@ -129,7 +129,7 @@ data-user='{{JSON.stringify(user)}}'
 
 <!-- Playlist -->
 <table id="playlist" class="table">
-  <tbody>
+  <tbody ui-sortable="mc.plstSort" ng-model="playlist">
     <tr ng-repeat="item in playlist | filter:ui.inputSearch.text | orderBy:'position'" ng-class="{ active: item._id == mc.current._id, selectable: (me.owner || me.admin) && item._id != mc.current._id }">
       <td ng-click="mc.forcePlay(this.item, true)" ng-bind="item.position | pad:2:'.'"></td>
       <td ng-click="mc.forcePlay(this.item, true)" ng-bind="item.name"></td>
@@ -147,12 +147,14 @@ data-user='{{JSON.stringify(user)}}'
 {% block js %}
 <script src="/socket.io/socket.io.js"></script>
 <script src="/assets/vendor/moment/min/moment.min.js"></script>
+<script src="/assets/vendor/jquery-ui/ui/minified/jquery-ui.min.js"></script>
 <script src="/assets/vendor/angular/angular.min.js"></script>
 <script src="/assets/vendor/angular-animate/angular-animate.min.js"></script>
 <script src="/assets/vendor/angular-sanitize/angular-sanitize.min.js"></script>
 <script src="/assets/vendor/angular-moment/angular-moment.min.js"></script>
 <script src="/assets/vendor/swfobject/swfobject/swfobject.js"></script>
 <script src="/assets/js/xmbd/src/xmbd.js"></script>
+<script src="/assets/js/directives/ui-sortable/src/sortable.js"></script>
 <script src="/assets/js/directives/synergy.utils.js"></script>
 <script src="/assets/js/controllers/channel.js"></script>
 {% endblock %}

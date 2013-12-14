@@ -1,6 +1,6 @@
 var socket = io.connect('/?channel=' + $('body').data('shortstring'));
 
-var app = angular.module('synergy', ['ngAnimate', 'ngSanitize', 'angularMoment', 'synergy.utils']);
+var app = angular.module('synergy', ['ngAnimate', 'ngSanitize', 'angularMoment', 'synergy.utils', 'ui.sortable']);
 app.config(['$interpolateProvider', function($interpolateProvider){
   $interpolateProvider.startSymbol('#{');
   $interpolateProvider.endSymbol('}#');
@@ -57,6 +57,26 @@ app.controller('ChannelController', ['$scope', function($scope){
 
     // TODO: if no item found, force sync
     $scope.mc.plstAlign();
+    $scope.$apply();
+  });
+  socket.on('playlist.move', function(serverplaylist){
+    console.log('move playlist');
+    angular.forEach($scope.playlist, function(myitem){
+      var serverItem;
+
+      for (var i = 0; i < serverplaylist.length; i++) {
+        if(serverplaylist[i]._id === myitem._id){
+          serverItem = serverplaylist[i];
+          break;
+        }
+      };
+
+      if(serverItem){
+        myitem.position = serverItem.position;
+      } else {
+        // TODO: ask the server for a new playlist.
+      }
+    });
     $scope.$apply();
   });
 
@@ -195,11 +215,29 @@ app.controller('ChannelController', ['$scope', function($scope){
     },
     plstAlign: function(){
       $scope.playlist.sort(function(a, b){ return a.position - b.position; });
-      var cur = 1;
-      angular.forEach($scope.playlist, function(item){
-        item.position = cur;
-        cur = cur + 1;
+      angular.forEach($scope.playlist, function(item, key){
+        item.position = key + 1;
       });
+    },
+    plstSort: {
+      axis: 'y',
+      scroll: false,
+      forceHelperSize: true,
+      update: function(e, ui){
+        console.log('reorder');
+        
+        $scope.playlist.sort(function(a, b){ return a.position - b.position });
+        $scope.playlist.splice(ui.item.sortable.dropindex, 0, $scope.playlist.splice(ui.item.sortable.index, 1)[0]);
+        //angular.forEach($scope.playlist,function(i){console.log(i.position, i.name)});
+
+        for (var i = 0; i < $scope.playlist.length; i++) {
+          $scope.playlist[i].position = i + 1;
+        };
+
+        $scope.mc.plstAlign();
+
+        socket.emit('playlist.move', $scope.playlist.map(function(i){ return { _id: i._id, position: i.position }; }));
+      }
     }
   };
 
