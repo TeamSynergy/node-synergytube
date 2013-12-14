@@ -62,8 +62,7 @@ app.controller('ChannelController', ['$scope', function($scope){
     $scope.$apply();
   });
   socket.on('playlist.move', function(serverplaylist){
-    // TODO: if serverplaylist is undefined, request new one.
-    if(!serverplaylist)  return;
+    if(!serverplaylist)  return socket.emit('playlist.get');
     console.log('move playlist');
     angular.forEach($scope.playlist, function(myitem){
       var serverItem;
@@ -81,6 +80,10 @@ app.controller('ChannelController', ['$scope', function($scope){
         // TODO: ask the server for a new playlist.
       }
     });
+    $scope.$apply();
+  });
+  socket.on('playlist.get', function(playlist){
+    $scope.playlist = playlist;
     $scope.$apply();
   });
 
