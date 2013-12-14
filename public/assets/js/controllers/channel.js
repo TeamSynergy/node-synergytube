@@ -30,6 +30,8 @@ app.controller('ChannelController', ['$scope', function($scope){
     $scope.me.owner = data.me.owner;
     $scope.me.admin = data.me.admin;
 
+    $scope.mc.plstSort.disabled = !($scope.me.owner || $scope.me.admin);
+
 
     $scope.$apply();
     $('#chat').scrollTop($('#chat')[0].scrollHeight);
@@ -60,6 +62,8 @@ app.controller('ChannelController', ['$scope', function($scope){
     $scope.$apply();
   });
   socket.on('playlist.move', function(serverplaylist){
+    // TODO: if serverplaylist is undefined, request new one.
+    if(!serverplaylist)  return;
     console.log('move playlist');
     angular.forEach($scope.playlist, function(myitem){
       var serverItem;
@@ -223,12 +227,17 @@ app.controller('ChannelController', ['$scope', function($scope){
       axis: 'y',
       scroll: false,
       forceHelperSize: true,
+      disabled: true,
       update: function(e, ui){
+        console.log($scope.me);
+        if(!($scope.me.owner || $scope.me.admin))  return console.log('neither owner nor admin');
+
         console.log('reorder');
-        
+
         $scope.playlist.sort(function(a, b){ return a.position - b.position });
         $scope.playlist.splice(ui.item.sortable.dropindex, 0, $scope.playlist.splice(ui.item.sortable.index, 1)[0]);
-        //angular.forEach($scope.playlist,function(i){console.log(i.position, i.name)});
+        // for debugging purposes:
+        // angular.forEach($scope.playlist,function(i){console.log(i.position, i.name)});
 
         for (var i = 0; i < $scope.playlist.length; i++) {
           $scope.playlist[i].position = i + 1;

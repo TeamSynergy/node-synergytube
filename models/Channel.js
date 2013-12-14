@@ -47,4 +47,14 @@ ChannelSchema.methods.alignPlaylist = function(fn){
   this.save(fn);
 };
 
+ChannelSchema.methods.getCurrent = function(){
+  return this.playlist.sort(utils.sortByStarttime)[0];
+};
+
+ChannelSchema.methods.getNext = function(current){
+  current = current || this.getCurrent();
+  var byPos = this.playlist.sort(utils.sortByPosition);
+  return byPos[current.position] ? byPos[current.position] : byPos[0];
+};
+
 var Channel = module.exports = mongoose.model('Channel', ChannelSchema);
