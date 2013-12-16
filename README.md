@@ -3,15 +3,14 @@
 
 ## Status
 ### Working:
-* Loginsystem
-* Profiles
-* Playlist (basic support)
+* Login-system & Own Profile
+* Playlist & Playlist Operations
 * Chat
+* Channel creation
 
 ### To be implemented:
 * Profiles (of other users)
-* Channel-Administration
-* AAAALLL the stuff, unfinished in lib/sockethandler.js
+* Channel administration stuff
 
 ## Development
 Provide us with Issues, Pull Requests or [write us](mailto:screeny05@gmail.com).
@@ -25,7 +24,7 @@ Never. But we'll have it working soon! I believe in a basic working server until
 As hard as we can.
 
 ### What is currently working?
-Login, models should be finished
+Login, Creating your own Channel, Managing & Playback
 
 ### How do I install this?
 In order to use this you need some prerequisites:
@@ -42,7 +41,7 @@ Commands:
 npm install
 bower install
 
-# Currently not working:
+# Not tested yet:
 grunt
 ```
 
