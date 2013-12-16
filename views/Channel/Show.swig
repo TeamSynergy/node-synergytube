@@ -149,10 +149,11 @@ data-user='{{JSON.stringify(user)}}'
   <h4>It seems, you are here for the first time. Let me introduce you some of the Things you'll have to learn:</h4>
   <p>See that <i class="fa fa-plus"></i> up there? Click on it to add new Items to the playlist. So obviously the <i class="fa fa-search"></i> is for Searching Items.</p>
   <p>You also have the ability to force-play an item on all clients, simply by clicking on it.</p>
+  <p>To move items, just drag'n'drop them to the Position which fits you better.</p>
   <p>Attention: The <i class="fa fa-trash-o"></i> deletes the Item. Use it wth caution, as there's currently no undo for that.</p>
   <p>In the middle there are familiar-looking media controls. Hint: the <i class="fa fa-random"></i> only plays a random item. <i>It does not randomize the playlist.</i></p>
   <p>Now let's enjoy some of this fun! If you find a Bug, have an awesome Idea or simply want to help us improve Synergytube visit us on <a href="https://github.com/TeamSynergy/node-synergytube">GitHub</a>.</p>
-  <i class="fa fa-heart" style="color: #dadada"></i>
+  <i class="fa fa-heart text-muted"></i>
 </div>
 {% endif %}
 
