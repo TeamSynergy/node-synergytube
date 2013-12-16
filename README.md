@@ -1,6 +1,11 @@
 # SynergyTube
 > SynergyTube aims to provide an alternative to the now shut-down SynchTube
 
+---
+> This is your ultimate sharing place for your newest kitten-videos, your favourite Song or just another Let's Play. Synergytube allows you to create up to 2 own Channels where you can watch videos, livestreams or listen to Music with your friends, strangers or simply everyone. The media will be synced between everyone in the Channel, so everyone gets the same as you do!
+Learn more!
+
+
 ## Status
 ### Working:
 * Login-system & Own Profile
