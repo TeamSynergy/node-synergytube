@@ -20,10 +20,15 @@ exports.index = function(req, res){
     function populateThumbnail(channels, fn){
       async.each(channels, function(channel, next){
         channel.playlist.sort(utils.sortByStarttime);
-        xmbd.getThumbnail(channel.playlist[0].provider, channel.playlist[0].media_id, function(err, thumb){
-          channel.current_thumbnail = thumb;
-          next(err);
-        });
+        if(channel.playlist.length > 0){
+          xmbd.getThumbnail(channel.playlist[0].provider, channel.playlist[0].media_id, function(err, thumb){
+            channel.current_thumbnail = thumb;
+            next(err);
+          });
+        } else {
+          channel.current_thumbnail = '';
+          next();
+        }
       }, function(err){
         fn(err, channels)
       });

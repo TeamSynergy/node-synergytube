@@ -2,3 +2,7 @@
   font-size: 1.4em;
   vertical-align: middle;
 }
+
+textarea{
+  max-width: 100%;
+}

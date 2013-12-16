@@ -49,3 +49,37 @@ exports.Create = function(req, res){
 
   res.render('Channel/Create', d);
 };
+
+exports.Create_Post = function(req, res){
+  var d = getData(req);
+  if(!d.user.logged_in)  return res.redirect('back');
+  if(!req.form)  return res.redirect('back');
+
+  req.form.complete(function(err, fields, files){
+    if(err)
+      return res.render('Channel/Create', getData(req, err));
+    console.log(fields);
+    if(!fields.title || !fields.url || !fields.description){
+      return res.render('Channel/Create', getData(req, 'Invalid Request'));
+    }
+    if(fields.url.length < 4 || fields.url.length > 20 || fields.title.length > 20
+        || fields.description.length > 400 || !/^[a-z0-9\-]*$/.test(fields.url) || fields.description.length < 40){
+      return res.render('Channel/Create', getData(req, 'Insufficent Arguments'));
+    }
+
+    var title = _s.trim(fields.title);
+    var url   = _s.trim(fields.url, '-');
+    var desc  = _s.escapeHTML(fields.description.replace('\n', '<br>'));
+
+    Channel.create({
+      name: title,
+      short_string: url,
+      description: desc,
+      _owner: req.user._id,
+    }, function(err, channel){
+      if(err)  return res.render('Channel/Create', getData(req, err));
+      res.redirect('/c/' + channel.short_string);
+    });
+
+  });
+}

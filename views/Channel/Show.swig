@@ -21,7 +21,7 @@ data-user='{{JSON.stringify(user)}}'
 
   <!-- Player -->
   <div class="col-md-6">
-    <div id="player" ut-xmbd="mc.current" ut-xmbd-next="mc.nextFn"><span class="error">Error :(</span></div>
+    <div id="player" ut-xmbd="mc.current" ut-xmbd-next="mc.nextFn" ut-plst-length="playlist.length"><span class="error">Error :(</span></div>
   </div>
 
 
@@ -143,6 +143,18 @@ data-user='{{JSON.stringify(user)}}'
   </tbody>
 </table>
 
+{% if user._id.toString() === channel._owner && channel.playlist.length == 0 %}
+<div class="well" ng-if="playlist.length == 0">
+  <h2>Hello, {{user.display_name}}!</h2>
+  <h4>It seems, you are here for the first time. Let me introduce you some of the Things you'll have to learn:</h4>
+  <p>See that <i class="fa fa-plus"></i> up there? Click on it to add new Items to the playlist. So obviously the <i class="fa fa-search"></i> is for Searching Items.</p>
+  <p>You also have the ability to force-play an item on all clients, simply by clicking on it.</p>
+  <p>Attention: The <i class="fa fa-trash-o"></i> deletes the Item. Use it wth caution, as there's currently no undo for that.</p>
+  <p>In the middle there are familiar-looking media controls. Hint: the <i class="fa fa-random"></i> only plays a random item. <i>It does not randomize the playlist.</i></p>
+  <p>Now let's enjoy some of this fun! If you find a Bug, have an awesome Idea or simply want to help us improve Synergytube visit us on <a href="https://github.com/TeamSynergy/node-synergytube">GitHub</a>.</p>
+  <i class="fa fa-heart" style="color: #dadada"></i>
+</div>
+{% endif %}
 
 
 

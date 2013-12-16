@@ -9,6 +9,8 @@ app.config(['$interpolateProvider', function($interpolateProvider){
 app.controller('ChannelController', ['$scope', function($scope){
   $scope.me = $('body').data('user');
   $scope.playlist = [];
+  $scope.chat = [];
+  
 
   socket.on('channel.init', function(data){
     console.log(data);

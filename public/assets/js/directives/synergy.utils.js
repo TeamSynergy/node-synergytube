@@ -31,6 +31,7 @@ utils.directive('utXmbd', function(){
     var endedFn;
     var cueTo;
     var isPlaying;
+    var playlistLength;
     scope.$watch(attrs.utXmbd, function(i){
       item = i;
       updateX();
@@ -38,6 +39,12 @@ utils.directive('utXmbd', function(){
     scope.$watch(attrs.utXmbdNext, function(fn){
       endedFn = fn;
       updateX();
+    });
+    scope.$watch(attrs.utPlstLength, function(val, old){
+      playlistLength = val;
+      if(old === 0 && val === 1){
+        updateX();
+      }
     });
 
     var updateX = function(){
@@ -69,6 +76,9 @@ utils.directive('utXmbd', function(){
         x.on('vEnded', function(){
           x.unbind('vEnded');
           scope.$apply(endedFn);
+          if(playlistLength === 1){
+            updateX();
+          }
         });
       }
     };
