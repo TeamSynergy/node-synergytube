@@ -281,6 +281,9 @@
 #playlist .selectable{
   cursor: pointer;
 }
+#playlist .limwidth{
+  width: 5%;
+}
 #playlist .remove{
   border-left: 1px solid #DDD;
   background: #FAFAFA!important;

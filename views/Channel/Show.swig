@@ -135,10 +135,10 @@ data-user='{{JSON.stringify(user)}}'
 <table id="playlist" class="table">
   <tbody ui-sortable="mc.plstSort" ng-model="playlist">
     <tr ng-repeat="item in playlist | filter:ui.inputSearch.text | orderBy:'position'" ng-class="{ active: item._id == mc.current._id, selectable: (me.owner || me.admin) && item._id != mc.current._id }">
-      <td ng-click="mc.forcePlay(this.item, true)" ng-bind="item.position | pad:2:'.'"></td>
-      <td ng-click="mc.forcePlay(this.item, true)" ng-bind="item.name"></td>
-      <td ng-click="mc.forcePlay(this.item, true)" ng-bind="item.duration | duration"></td>
-      <td ng-click="mc.remove(item)" class="remove" ng-show="me.owner || me.admin" ng-class="{ active: item.removing }"><i class="fa" ng-class="{ 'fa-trash-o': !item.removing, 'fa-cog fa-spin': item.removing }"></i></td>
+      <td class="limwidth" ng-click="mc.forcePlay(this.item, true)" ng-bind="item.position | pad:2:'.'"></td>
+      <td                  ng-click="mc.forcePlay(this.item, true)" ng-bind="item.name"></td>
+      <td class="limwidth" ng-click="mc.forcePlay(this.item, true)" ng-bind="item.duration | duration"></td>
+      <td class="limwidth remove" ng-click="mc.remove(item)" ng-show="me.owner || me.admin" ng-class="{ active: item.removing }"><i class="fa" ng-class="{ 'fa-trash-o': !item.removing, 'fa-cog fa-spin': item.removing }"></i></td>
     </tr>
   </tbody>
 </table>
