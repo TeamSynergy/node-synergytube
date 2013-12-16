@@ -158,8 +158,8 @@ app.get('/u/set', routes.User.RedirectMe);
 app.get('/u/create', routes.User.Create);
 app.get('/u/:userid', routes.User.Show);
 
+app.get('/c/create', routes.Channel.Create);
 app.get('/c/:channel_string', routes.Channel.Show);
 app.get('/c/:channel_string/admin', routes.Channel.Admin);
-app.get('/c/create', routes.Channel.Create);
 
 io.sockets.on('connection', sockethandler);

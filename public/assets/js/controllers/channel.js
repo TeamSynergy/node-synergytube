@@ -37,7 +37,9 @@ app.controller('ChannelController', ['$scope', function($scope){
     $('#chat').scrollTop($('#chat')[0].scrollHeight);
   });
 
-  socket.on('err', function(err){console.warn('server-error', err);})
+  // TODO: add proper handler
+  socket.on('err', function(err){console.error('server-error', err); });
+
 
   socket.on('playlist.push', function(item){
     console.log('new item', item);
@@ -51,35 +53,43 @@ app.controller('ChannelController', ['$scope', function($scope){
   });
   socket.on('playlist.delete', function(deleteitem){
     console.log('remove item', deleteitem);
+
+    var found = false;
+    // iterate through our playlist.
     for (var i = 0; i < $scope.playlist.length; i++) {
       if($scope.playlist[i]._id === deleteitem._id){
+        // remove the item we've found and break the loop.
         $scope.playlist.splice(i, 1);
+        found = true;
+        break;
       }
     };
 
-    // TODO: if no item found, force sync
+    if(!found)  return socket.emit('playlist.get');
+
     $scope.mc.plstAlign();
     $scope.$apply();
   });
   socket.on('playlist.move', function(serverplaylist){
     if(!serverplaylist)  return socket.emit('playlist.get');
     console.log('move playlist');
+
+    var reqNew = false;
     angular.forEach($scope.playlist, function(myitem){
-      var serverItem;
+      if(reqNew)  return;
 
       for (var i = 0; i < serverplaylist.length; i++) {
         if(serverplaylist[i]._id === myitem._id){
-          serverItem = serverplaylist[i];
-          break;
+          myitem.position = serverplaylist[i].position;
+          return;
         }
       };
 
-      if(serverItem){
-        myitem.position = serverItem.position;
-      } else {
-        // TODO: ask the server for a new playlist.
-      }
+      reqNew = true;
     });
+
+    if(reqNew)  return socket.emit('playlist.get');
+
     $scope.$apply();
   });
   socket.on('playlist.get', function(playlist){
@@ -135,9 +145,6 @@ app.controller('ChannelController', ['$scope', function($scope){
     $scope.users.push(user);
     $scope.$apply();
   });
-
-  // TODO: add proper handler
-  socket.on('err', console.error);
 
   // mc = mediacontroller
   $scope.mc = {

@@ -1,7 +1,11 @@
 {% extends '../layout.swig' %}
 
 {% block title %}My Profile · SynergyTube{% endblock %}
-{% block head %}<link rel="stylesheet" href="/assets/css/my-profile.css">{% endblock %}
+{% block head %}
+  <!-- build:css /assets/css/my-profile.css -->
+  <link rel="stylesheet" href="/assets/css/my-profile.css">
+  <!-- endbuild -->
+{% endblock %}
 {% block angularApp %}MyProfileController{% endblock %}
 {% block customdata %}
   data-fbid="{{user.profiles.facebook}}"
@@ -93,5 +97,7 @@
 
 {% block js %}
 <script src="/assets/vendor/angular/angular.min.js"></script>
+<!-- build:js /assets/js/controllers/my-profile.js -->
 <script src="/assets/js/controllers/my-profile.js"></script>
+<!-- endbuild -->
 {% endblock %}

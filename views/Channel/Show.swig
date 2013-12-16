@@ -1,7 +1,11 @@
 {% extends '../layout.swig' %}
 
 {% block title %}{{channel.name}} · SynergyTube{% endblock %}
-{% block head %}<link rel="stylesheet" href="/assets/css/channel.css">{% endblock %}
+{% block head %}
+  <!-- build:css /assets/css/channel.css -->
+  <link rel="stylesheet" href="/assets/css/channel.css">
+  <!-- endbuild -->
+{% endblock %}
 {% block angularApp %}ChannelController{% endblock %}
 {% block customdata %}
 data-shortstring="{{channel.short_string}}"
@@ -134,7 +138,7 @@ data-user='{{JSON.stringify(user)}}'
       <td ng-click="mc.forcePlay(this.item, true)" ng-bind="item.position | pad:2:'.'"></td>
       <td ng-click="mc.forcePlay(this.item, true)" ng-bind="item.name"></td>
       <td ng-click="mc.forcePlay(this.item, true)" ng-bind="item.duration | duration"></td>
-      <td ng-click="mc.remove(item)" class="remove" ng-show="me.owner || me.admin" ng-class="{ active: item.removing }"><i class="fa" ng-class="{'fa-trash-o': !item.removing, 'fa-cog fa-spin': item.removing}"></i></td>
+      <td ng-click="mc.remove(item)" class="remove" ng-show="me.owner || me.admin" ng-class="{ active: item.removing }"><i class="fa" ng-class="{ 'fa-trash-o': !item.removing, 'fa-cog fa-spin': item.removing }"></i></td>
     </tr>
   </tbody>
 </table>
@@ -146,15 +150,19 @@ data-user='{{JSON.stringify(user)}}'
 
 {% block js %}
 <script src="/socket.io/socket.io.js"></script>
-<script src="/assets/vendor/moment/min/moment.min.js"></script>
-<script src="/assets/vendor/jquery-ui/ui/minified/jquery-ui.min.js"></script>
 <script src="/assets/vendor/angular/angular.min.js"></script>
+<!-- build:js /assets/js/angular.contrib.js -->
 <script src="/assets/vendor/angular-animate/angular-animate.min.js"></script>
 <script src="/assets/vendor/angular-sanitize/angular-sanitize.min.js"></script>
+<!-- endbuild -->
+<!-- build:js /assets/js/channel.js -->
 <script src="/assets/vendor/angular-moment/angular-moment.min.js"></script>
+<script src="/assets/vendor/moment/min/moment.min.js"></script>
+<script src="/assets/vendor/jquery-ui/ui/minified/jquery-ui.min.js"></script>
 <script src="/assets/vendor/swfobject/swfobject/swfobject.js"></script>
-<script src="/assets/js/xmbd/src/xmbd.js"></script>
+<script src="/assets/vendor/xmbd/build/xmbd.min.js"></script>
 <script src="/assets/js/directives/ui-sortable/src/sortable.js"></script>
-<script src="/assets/js/directives/synergy.utils.js"></script>
 <script src="/assets/js/controllers/channel.js"></script>
+<!-- endbuild -->
+<script src="/assets/js/directives/synergy.utils.js"></script>
 {% endblock %}

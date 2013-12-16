@@ -42,11 +42,14 @@
 	<a href="/u/auth/facebook" class="btn btn-facebook btn-lg"><i class="fa fa-facebook fa-lg"></i> Facebook</a>
 	<a href="/u/auth/google" class="btn btn-google btn-lg"><i class="fa fa-google-plus fa-lg"></i> Google</a>
 	<input type="submit" value="Register!" class="btn btn-primary btn-lg pull-right">
+	<div class="clearfix"></div>
 </form>
 
 {% endblock %}
 
-{% block js %}{#
+{% block js %}
+{#
 <script src="/assets/vendor/angular/angular.min.js"></script>
-<script src="/assets/js/controllers/userCreateController.js"></script>#}
+<script src="/assets/js/controllers/userCreateController.js"></script>
+#}
 {% endblock %}

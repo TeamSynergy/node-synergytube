@@ -5,9 +5,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1">
 
+  <!-- build:css /assets/css/main.css -->
   <link rel="stylesheet" href="/assets/vendor/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="/assets/vendor/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="/assets/css/main.css">
+  <!-- endbuild -->
   {% block head %}{% endblock %}
 </head>
 <body ng-controller="{% block angularApp %}{% endblock %}" {% block customdata %}{% endblock %}>
@@ -24,7 +26,7 @@
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
           <li class="active"><a href="#">Dash</a></li>
-          <li><a href="#">Foo</a></li>
+          <li><a href="/c/create">Create Channel</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           {% if user.logged_in %}
@@ -71,8 +73,10 @@
     {% block content %}{% endblock %}
   </div>
 
+  <!-- build:js /assets/js/main.js -->
   <script src="/assets/vendor/jquery/jquery.min.js"></script>
   <script src="/assets/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+  <!-- endbuild -->
   {% block js %}{% endblock %}
 </body>
 </html>
