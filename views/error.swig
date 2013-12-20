@@ -10,7 +10,7 @@
   <dd><a href="https://github.com/TeamSynergy/node-synergytube/wiki/err-EUNOTFOUND" target="_blank">EUNOTFOUND</a></dd>
 
   <dt>Message</dt>
-  <dd>User not found.</dd>
+  <dd>{{ error }}</dd>
 
   <dt>Possible Solutions</dt>
   <dd>You have to create a User in order to login.</dd>

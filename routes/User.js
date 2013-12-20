@@ -14,7 +14,7 @@ exports.AuthFail = function(req, res){
   var f = req.flash('error');
 
   if(f && f.length > 0)
-    res.render('error', getData(req, f));
+    res.render('error', getData(req, f, true));
   else
     res.redirect('back');
 };
@@ -182,7 +182,7 @@ exports.CreateNew = function(req, res){
       req.login(user, fn);
     }
   ], function(err){
-    if(err)  return res.render('error', getData(req, err));
+    if(err)  return res.render('User/Create', getData(req, err));
 
     res.redirect('/');
   });

@@ -140,7 +140,7 @@ if(config.passport.local){
     });
   }));
   app.post('/u/auth/local', utils.passport('local'));
-  app.post('/u/create/local', routes.User.CreateNew)
+  app.post('/u/create', routes.User.CreateNew)
 }
 
 
