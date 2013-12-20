@@ -28,6 +28,7 @@
     "momentjs": "~2.4.0",
     "angular-moment": "~0.5.2",
     "jquery-ui": "~1.10.3",
-    "underscore.string": "~2.3.3"
+    "underscore.string": "~2.3.3",
+    "angular-elastic": "~2.3.0"
   }
 }

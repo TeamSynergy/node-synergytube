@@ -143,7 +143,7 @@ data-user='{{JSON.stringify(user)}}'
   </tbody>
 </table>
 
-{% if user._id.toString() === channel._owner && channel.playlist.length == 0 %}
+{% if user._id.toString() === channel._owner && channel.playlist.length === 0 %}
 <div class="well" ng-if="playlist.length == 0">
   <h2>Hello, {{user.display_name}}!</h2>
   <h4>It seems, you are here for the first time. Let me introduce you some of the Things you'll have to learn:</h4>
@@ -156,7 +156,6 @@ data-user='{{JSON.stringify(user)}}'
   <i class="fa fa-heart text-muted"></i>
 </div>
 {% endif %}
-
 
 
 {% endblock %}

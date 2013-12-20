@@ -2,12 +2,7 @@ var utils = angular.module('synergy.utils', []);
 
 utils.directive('utTooltip', function(){
   return function(scope, element, attrs){
-    var text = '';
-    
-    scope.$watch(function(){
-      text = attrs.utTooltip;
-      update();
-    });
+    var text = attrs.utTooltip;
 
     var update = function(){
       $(element[0]).tooltip({
@@ -19,6 +14,11 @@ utils.directive('utTooltip', function(){
         placement: attrs.utTooltipPlacement || 'bottom'
       });
     };
+
+    scope.$watch(function(){
+      text = attrs.utTooltip;
+      update();
+    });
 
   };
 });

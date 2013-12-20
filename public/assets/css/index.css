@@ -8,11 +8,6 @@
 
   background-repeat: no-repeat;
 
-  -webkit-background-size: cover;
-     -moz-background-size: cover;
-       -o-background-size: cover;
-          background-size: cover;
-
   -webkit-transition: all 250ms ease;
      -moz-transition: all 250ms ease;
       -ms-transition: all 250ms ease;

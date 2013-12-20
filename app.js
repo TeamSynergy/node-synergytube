@@ -11,6 +11,7 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server, { 'browser client minification': true });
 
+var _s = require('underscore.string');
 var xtend = require('xtend');
 var utils = require('./lib/utils');
 var form = require('./lib/connect-form');
@@ -72,12 +73,6 @@ passport.deserializeUser(function(creds, done){
   User.findOne({ email: email }).lean().exec(done);
 });
 
-var passportCallbackOptions = {
-  successRedirect: 'back',
-  failureRedirect: '/u/auth/fail',
-  failureFlash: true
-};
-
 
 var authUserByMail = function(mail, displayname, fbid, ggid, done){
   User.findAndUpdateIds(mail, fbid, ggid, function(err, user){
@@ -104,23 +99,23 @@ var authUserByMail = function(mail, displayname, fbid, ggid, done){
 
 if(config.passport.facebook){
   passport.use(new FacebookStrategy(xtend(config.passport.facebook, {
-    callbackURL: config.server.hostname + '/u/auth/facebook/callback'
+    callbackURL: 'http://' + config.server.hostname + '/u/auth/facebook/callback'
   }), function(accessToken, refreshToken, profile, done){
     authUserByMail(utils.normalizeMail(profile.emails[0].value), profile.displayName, profile.id, '', done);
   }));
   app.get('/u/auth/facebook', passport.authenticate('facebook', { scope: 'email' }));
-  app.get('/u/auth/facebook/callback', passport.authenticate('facebook', passportCallbackOptions));
+  app.get('/u/auth/facebook/callback', utils.passport('facebook'));
 }
 
 if(config.passport.google){
   passport.use(new GoogleStrategy({
-    realm: config.server.hostname,
-    returnURL: config.server.hostname + '/u/auth/google/callback'
+    realm: 'http://' + config.server.hostname,
+    returnURL: 'http://' + config.server.hostname + '/u/auth/google/callback'
   }, function(identifier, profile, done){
     authUserByMail(utils.normalizeMail(profile.emails[0].value), profile.displayName, '', identifier, done);
   }));
   app.get('/u/auth/google', passport.authenticate('google'));
-  app.get('/u/auth/google/callback', passport.authenticate('google', passportCallbackOptions));
+  app.get('/u/auth/google/callback', utils.passport('google'));
 }
 
 if(config.passport.local){
@@ -144,12 +139,13 @@ if(config.passport.local){
       });
     });
   }));
-  app.post('/u/auth/local', passport.authenticate('local', passportCallbackOptions));
+  app.post('/u/auth/local', utils.passport('local'));
   app.post('/u/create/local', routes.User.CreateNew)
 }
 
 
 app.get('/', routes.index);
+app.get('/err', routes.err);
 
 app.get('/u/auth/fail', routes.User.AuthFail);
 app.get('/u/auth/logout', routes.User.DestroySession);

@@ -41,5 +41,10 @@ exports.index = function(req, res){
   });
 };
 
+exports.err = function(req, res){
+  var d = getData(req);
+  res.render('error', d);
+}
+
 exports.User = require('./User');
 exports.Channel = require('./Channel');

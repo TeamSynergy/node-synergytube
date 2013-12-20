@@ -34,6 +34,8 @@ app.controller('ChannelController', ['$scope', function($scope){
 
     $scope.mc.plstSort.disabled = !($scope.me.owner || $scope.me.admin);
 
+    $scope.ui.inputAdd.show = $scope.playlist.length === 0;
+
 
     $scope.$apply();
     $('#chat').scrollTop($('#chat')[0].scrollHeight);
@@ -68,6 +70,13 @@ app.controller('ChannelController', ['$scope', function($scope){
     };
 
     if(!found)  return socket.emit('playlist.get');
+
+    if($scope.playlist.length === 0){
+      $('#player').children().replaceWith('<span class="error">No Item :(</span>');
+      if(($scope.me.owner || $scope.me.admin) && !$scope.ui.inputAdd.show){
+        $scope.ui.inputAdd.toggle();
+      }
+    }
 
     $scope.mc.plstAlign();
     $scope.$apply();

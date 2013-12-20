@@ -1,4 +1,4 @@
-﻿{% extends 'layout.swig' %}
+{% extends 'layout.swig' %}
 
 {% block title %}Dash · SynergyTube{% endblock %}
 {% block head %}

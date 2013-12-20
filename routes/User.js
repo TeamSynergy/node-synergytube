@@ -1,4 +1,5 @@
 var async = require('async');
+var url = require('url');
 var _s = require('underscore.string');
 var avaio = require('avatars.io');
 var User = require('../models/User');
@@ -10,7 +11,12 @@ avaio.appId = config.avatars_io.appID;
 avaio.accessToken = config.avatars_io.accessToken;
 
 exports.AuthFail = function(req, res){
-  res.render('index', getData(req, req.flash('error')));
+  var f = req.flash('error');
+
+  if(f && f.length > 0)
+    res.render('error', getData(req, f));
+  else
+    res.redirect('back');
 };
 
 exports.DestroySession = function(req, res){
@@ -71,13 +77,15 @@ exports.Set = function(req, res){
       },
 
       function setPassword(cb){
-        if(fields.password)
+        if(fields.password){
+          if(fields.password.length <= 6)  return cb('The password must be longer than 6 chars.')
           User.findById(req.user._id, function(err, user){
             if(err)  return cb(err);
             user.setLocalPassword(fields.password, cb)
           });
-        else
+        } else {
           cb();
+        }
       },
 
       function setAvatar(cb){
@@ -92,6 +100,7 @@ exports.Set = function(req, res){
               utils.setAvatarHelper(user, 'facebook', '//graph.facebook.com/' + user.profiles.facebook + '/picture?width=256&height=256', cb);
               break;
             case 'twitter':
+              if(!fields.twitteruser)  return cb('Please provide username.');
               utils.setAvatarHelper(user, 'twitter', '//avatars.io/twitter/' + fields.twitteruser + '?size=large', cb);
               break;
             case 'gravatar':
@@ -99,6 +108,7 @@ exports.Set = function(req, res){
               break;
             case 'upload':
               if(!files.avatar_image || files.avatar_image.size === 0)  return cb();
+              if(files.avatar_image.size > 2 * 1024 * 1024)  return cb('The filesize is limited to 2mb!');
               var e = _s.endsWith.bind(this, files.avatar_image.name);
               if(!e('.gif') && !e('.png') && !e('.jpg') && !e('.jpeg')){
                 return cb('Wrong filetype. Only gif, png and jpg are supported');
@@ -124,7 +134,7 @@ exports.Set = function(req, res){
 
     ], function(err){
       if(err)
-        res.render('index', getData(req, err));
+        res.render('/u/' + req.user._id, getData(req, err));
       else
         res.redirect('/u/' + req.user._id);
     });
@@ -132,30 +142,48 @@ exports.Set = function(req, res){
 };
 
 exports.CreateNew = function(req, res){
-  User.create(
-  {
-    display_name: req.body.displayname,
-    email: req.body.email,
-    'profiles.gravatar': utils.getMD5(req.body.email)
-  },
+  async.waterfall([
 
-  function(err, user){
-    if(err){
-      res.render('index', getData(req, err));
-    } else {
-      // we have to explicitly set our password.
-      // TODO add virtual setter
-      user.setLocalPassword(req.body.password, function(err){
-        if(err){
-          user.remove(function(err){
-            if(err){
-              res.render('index', getData(req, err));
-            }
-          });
-        } else {
-          res.redirect('/');
-        }
-      });
+    function validate(fn){
+      if(!req.body.displayname)  return fn('Please provide a displayname.');
+      if(!req.body.email)  return fn('Please provide a valid email.')
+      if(!req.body.password || req.body.password.length < 6)  return fn('Your password has to be at least 6 chars long.');
+
+      User
+        .findOne({ email: req.body.email })
+        .exec(function(err, user){
+          if(user)  return fn('User with the same email already exists.');
+          else  return fn();
+        });
+    },
+    
+    function userCreate(fn){
+      User.create({
+        display_name: req.body.displayname,
+        email: req.body.email,
+        'profiles.gravatar': utils.getMD5(req.body.email)
+      }, fn);
+    },
+
+
+    function setPwd(user, fn){
+      user.setLocalPassword(req.body.password, fn);
+    },
+
+
+    function findLean(user, fn){
+      User
+        .findOne({ _id: user._id })
+        .lean()
+        .exec(fn);
+    },
+
+    function login(user, fn){
+      req.login(user, fn);
     }
+  ], function(err){
+    if(err)  return res.render('error', getData(req, err));
+
+    res.redirect('/');
   });
 };

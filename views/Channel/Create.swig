@@ -1,3 +1,4 @@
+
 {% extends '../layout.swig' %}
 
 {% block title %}Create Channel · SynergyTube{% endblock %}
@@ -44,7 +45,7 @@
   <div class="form-group">
     <label for="description" class="col-sm-2 control-label">Description:</label>
     <div class="col-sm-10">
-      <textarea class="form-control" rows="3" ng-model="ui.desc.text" name="description"></textarea>
+      <textarea class="form-control" rows="3" ng-model="ui.desc.text" name="description" msd-elastic></textarea>
     </div>
   </div>
 
@@ -61,6 +62,7 @@
 
 {% block js %}
 <script src="/assets/vendor/angular/angular.min.js"></script>
+<script src="/assets/vendor/angular-elastic/elastic.js"></script>
 <script src="/assets/vendor/underscore.string/dist/underscore.string.min.js"></script>
 <script src="/assets/js/controllers/create-channel.js"></script>
 <script src="/assets/js/directives/synergy.utils.js"></script>

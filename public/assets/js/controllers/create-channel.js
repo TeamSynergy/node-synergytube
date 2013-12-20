@@ -1,4 +1,4 @@
-var app = angular.module('synergy', ['synergy.utils']);
+var app = angular.module('synergy', ['synergy.utils', 'monospaced.elastic']);
 app.config(['$interpolateProvider', function($interpolateProvider){
   $interpolateProvider.startSymbol('#{');
   $interpolateProvider.endSymbol('}#');

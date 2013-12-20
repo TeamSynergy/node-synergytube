@@ -30,3 +30,7 @@
 .alert{
   padding: 10px 30px;
 }
+
+label{
+	cursor: pointer;
+}
