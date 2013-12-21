@@ -278,6 +278,7 @@ app.controller('ChannelController', ['$scope', function($scope){
       currentItem: false,
       working: false,
       warning: false,
+      available: false,
       toggle: function(){
         this.show = !this.show;
         if(this.show){
@@ -293,18 +294,27 @@ app.controller('ChannelController', ['$scope', function($scope){
         var prs = x.getMediaId(inp);
 
         $scope.ui.inputAdd.working = true;
+        $scope.ui.inputAdd.available = false;
         $scope.ui.inputAdd.currentItem = false;
 
         x.getMediaInfo(prs.provider, prs.id, function(err, data){
           console.log(data);
-          if(err || !data || !data.available)
+          if(err || !data)
             $scope.ui.inputAdd.currentItem = false;
-          else
+          else{
             $scope.ui.inputAdd.currentItem = data;
+            $scope.ui.inputAdd.available = data.available;
+          }
 
           $scope.ui.inputAdd.working = false;
 
-          $scope.ui.inputAdd.warning = $scope.mc.plstContains(data.provider, data.id) ? 'Duplicate' : false;
+          if($scope.mc.plstContains(data.provider, data.id)){
+            $scope.ui.inputAdd.warning = 'Duplicate';
+          } else if(!data.available) {
+            $scope.ui.inputAdd.warning = 'Unvailable';
+          } else {
+            $scope.ui.inputAdd.warning = false;
+          }
 
           $scope.$apply();
         });

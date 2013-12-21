@@ -101,23 +101,37 @@ data-user='{{JSON.stringify(user)}}'
 
   <!-- Add a new item -->
   <form id="input-add" class="form-horizontal animate-show-top" ng-show="ui.inputAdd.show" ng-submit="ui.inputAdd.submit()">
+
+    <!-- text-input -->
     <div class="input-group">
+
       <span class="input-group-addon">Link:</span>
+
       <input type="text" class="form-control" id="inputAdd" ng-model="ui.inputAdd.text" placeholder="www.youtube.com/v/uN2X1MTwEIc" ng-change="ui.inputAdd.change()">
+
       <span class="input-group-addon animate-show-right" ng-show="ui.inputAdd.working"><i class="fa fa-cog fa-spin"></i></span>
+      
       <span class="input-group-btn">
-        <input type="submit" class="btn btn-primary" value="Add!" ng-disabled="!ui.inputAdd.currentItem">
+        <input type="submit" class="btn btn-primary" value="Add!" ng-disabled="!ui.inputAdd.currentItem || !ui.inputAdd.available">
       </span>
+
     </div>
+
+
+    <!-- info-bar -->
     <div class="info animate-show-top" ng-show="ui.inputAdd.currentItem" ng-class="{'success':ui.inputAdd.currentItem && !ui.inputAdd.warning, 'warning': ui.inputAdd.warning}">
+
       <span class="success" ng-show="ui.inputAdd.currentItem && !ui.inputAdd.warning"><i class="fa fa-check"></i></span>
       <span class="warning" ng-show="ui.inputAdd.warning"><i class="fa fa-warning"></i> <span ng-bind="ui.inputAdd.warning"></span></span>
+
       <span class="name">
         <i class="fa" ng-class="{'fa-youtube-play': ui.inputAdd.currentItem.provider == 'youtube',
                                  'fa-vimeo-square': ui.inputAdd.currentItem.provider == 'vimeo'}"></i>
         <span ng-bind="ui.inputAdd.currentItem.name"></span>
       </span>
+
       <span class="duration"><i class="fa fa-clock-o"></i> <span ng-bind="ui.inputAdd.currentItem.duration | duration"></span></span>
+
       <div class="clearfix"></div>
     </div>
   </form>
@@ -172,7 +186,7 @@ data-user='{{JSON.stringify(user)}}'
 <script src="/assets/vendor/moment/min/moment.min.js"></script>
 <script src="/assets/vendor/jquery-ui/ui/minified/jquery-ui.min.js"></script>
 <script src="/assets/vendor/swfobject/swfobject/swfobject.js"></script>
-<script src="/assets/vendor/xmbd/build/xmbd.min.js"></script>
+<script src="/assets/vendor/xmbd/src/xmbd.js"></script>
 <script src="/assets/js/directives/ui-sortable/src/sortable.js"></script>
 <script src="/assets/js/controllers/channel.js"></script>
 <!-- endbuild -->

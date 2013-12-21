@@ -29,9 +29,9 @@ app.controller('ChannelCreateController', ['$scope', function($scope){
         $scope.ui.messages.push('Short String must contain only of small characters, numbers and dashes.');
       }
 
-      if(!$scope.ui.desc.text || $scope.ui.desc.text.length < 40 || $scope.ui.desc.text.length > 400){
+      if(!$scope.ui.desc.text || $scope.ui.desc.text.length < 40 || $scope.ui.desc.text.length > 800){
         v = false;
-        $scope.ui.messages.push('Your description has to be at least 40 and at most 400 Characters long.')
+        $scope.ui.messages.push('Your description has to be at least 40 and at most 800 Characters long.')
       }
 
       return v;
