@@ -1,7 +1,7 @@
 {% extends '../layout.swig' %}
 
 {% block title %}Create User · SynergyTube{% endblock %}
-{% block angularApp %}ng-controller="ValidateCtrl"{% endblock %}
+{% block angularApp %}UserCreateController{% endblock %}
 
 {% block content %}
 <div class="jumbotron">
@@ -13,43 +13,43 @@
 	<p>Pssh: we won't collect any other information from your account than your name and your email!</p>
 </div>
 
-<form action="" method="post" class="form-horizontal well" name="newUser">
+<form action="" method="post" class="form-horizontal well" name="newUser" autocomplete="off">
 	<div class="form-group">
 		<label for="inputEmail" class="col-sm-2 control-label">Email</label>
 		<div class="col-sm-10">
-			<input class="form-control input-l" id="inputEmail" type="email" name="email" ng-model="email" placeholder="Email" required>
+			<input class="form-control input-l" id="inputEmail" type="text" name="email" ng-model="ui.email" placeholder="Email" ng-change="ui.emailChange()" required>
 		</div>
 	</div>
 	<div class="form-group">
 		<label for="inputDisplayname" class="col-sm-2 control-label">Displayname</label>
 		<div class="col-sm-10">
-			<input class="form-control" id="inputDisplayname" type="text" name="displayname" ng-model="displayname" placeholder="Displayname" required>
+			<input class="form-control" id="inputDisplayname" type="text" name="displayname" ng-model="ui.displayname" ng-change="ui.manualDisplayname = true" placeholder="Displayname" required>
 		</div>
 	</div>
 	<div class="form-group">
 		<label for="inputPassword" class="col-sm-2 control-label">Password</label>
 		<div class="col-sm-10">
-			<input class="form-control" id="inputPassword" type="password" name="password" ng-model="password" placeholder="Password" required>
+			<input class="form-control" id="inputPassword" type="password" name="password" ng-model="ui.password" placeholder="Password" required>
 		</div>
 	</div>
 	<div class="form-group">
 		<div class="col-sm-2"></div>
 		<div class="col-sm-10">
-			<input class="form-control" type="password" ng-model="passwordRepeat" placeholder="Repeat it!" required>
+			<input class="form-control" type="password" ng-model="ui.passwordRepeat" placeholder="Repeat it!" required>
 		</div>
 	</div>
 
 	<a href="/u/auth/facebook" class="btn btn-facebook btn-lg"><i class="fa fa-facebook fa-lg"></i> Facebook</a>
 	<a href="/u/auth/google" class="btn btn-google btn-lg"><i class="fa fa-google-plus fa-lg"></i> Google</a>
-	<input type="submit" value="Register!" class="btn btn-primary btn-lg pull-right">
+	<input type="submit" value="Register!" class="btn btn-primary btn-lg pull-right" ng-disabled="!ui.valid()">
 	<div class="clearfix"></div>
 </form>
+
+<ul class="alert alert-info" ng-show="!ui.valid()"><li ng-repeat="message in ui.messages" ng-bind="message"></li></ul>
 
 {% endblock %}
 
 {% block js %}
-{#
 <script src="/assets/vendor/angular/angular.min.js"></script>
-<script src="/assets/js/controllers/userCreateController.js"></script>
-#}
+<script src="/assets/js/controllers/create-user.js"></script>
 {% endblock %}
