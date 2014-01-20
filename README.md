@@ -55,6 +55,28 @@ grunt
 
 In the future there will be already built releases, but currently you won't come arround doing this.
 
+### I've installed it, now show me how to run it!
+Why so rude? but i will.
+
+First: be sure to rename the `config.example.js` to just `config.js` and edit the content of this file to your likings.
+
+Second: run it and create your first very own Channel! (after you logged in of course, sorry)
+
+```bash
+# rename the config
+mv config.example.js config.js
+
+# edit it 'til you're pleased
+nano config.js
+
+# run it! you can either just enter this:
+node app
+
+# or use something like forever
+forever start app.js
+
+```
+
 ### Why are you rewriting all this from scratch? it was working!
 Because it was crap. We mixed PHP with NodeJS and that felt crappy from the first day on.
 I now have time to focus more on the Development of this again, but it's a huge project.
