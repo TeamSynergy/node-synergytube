@@ -39,7 +39,8 @@
     "vimeo": "~0.1.7",
     "formidable": "~1.0.14",
     "request": "~2.29.0",
-    "underscore.string": "~2.3.3"
+    "underscore.string": "~2.3.3",
+    "moment": "~2.5.1"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
@@ -60,5 +61,6 @@
     "start": "node app",
     "test": "grunt --verbose"
   },
+  "main": "app.js",
   "license": "MIT"
 }

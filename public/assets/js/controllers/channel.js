@@ -206,7 +206,7 @@ app.controller('ChannelController', ['$scope', function($scope){
     getRandom: function(){
       // some special cases needed for not crashing our app.
       if($scope.playlist.length === 0)  return;
-      if($scope.playlist.length === 1)  return $scope.current._id;
+      if($scope.playlist.length === 1)  return;
       if($scope.playlist.length === 2)  return $scope.mc.getNext();
 
       var r;
@@ -226,10 +226,7 @@ app.controller('ChannelController', ['$scope', function($scope){
       // ignore item change if it has the same id.
       if(_id._id === $scope.mc.current._id)  return;
 
-      $scope.mc.current = _id;
-      $scope.mc.current.start_time = new Date();
-
-      socket.emit('playlist.play', $scope.mc.current);
+      socket.emit('playlist.play', _id);
     },
     remove: function(item){
       // we don't want two remove-processes working on the same item
@@ -366,6 +363,15 @@ app.controller('ChannelController', ['$scope', function($scope){
     loading: false,
     allLoaded: false,
     scrollTo: 0
+  }
+
+  // ec = Etc. Controller <:
+  $scope.ec = {
+    fav: function(){
+      if($scope.me.logged_in){
+        socket.emit('channel.favourite')
+      }
+    }
   }
 
 

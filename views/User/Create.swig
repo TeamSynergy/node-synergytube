@@ -14,6 +14,7 @@
 </div>
 
 <form action="" method="post" class="form-horizontal well" name="newUser" autocomplete="off">
+	{% if ext.show_local %}
 	<div class="form-group">
 		<label for="inputEmail" class="col-sm-2 control-label">Email</label>
 		<div class="col-sm-10">
@@ -38,18 +39,32 @@
 			<input class="form-control" type="password" ng-model="ui.passwordRepeat" placeholder="Repeat it!" required>
 		</div>
 	</div>
+	{% endif %}
 
+	{% if ext.show_facebook %}
 	<a href="/u/auth/facebook" class="btn btn-facebook btn-lg"><i class="fa fa-facebook fa-lg"></i> Facebook</a>
+	{% endif %}
+	{% if ext.show_google %}
 	<a href="/u/auth/google" class="btn btn-google btn-lg"><i class="fa fa-google-plus fa-lg"></i> Google</a>
+	{% endif %}
+	{% if ext.show_local %}
 	<input type="submit" value="Register!" class="btn btn-primary btn-lg pull-right" ng-disabled="!ui.valid()">
 	<div class="clearfix"></div>
+	{% endif %}
+	{% if !ext.show_local && !ext.show_facebook && !ext.show_google %}
+	<h3>There is currently no available Option to register. Try again later. If this Problem persists, contact an Admin.</h3>
+	{% endif %}
 </form>
 
+{% if ext.show_local %}
 <ul class="alert alert-info" ng-show="!ui.valid()"><li ng-repeat="message in ui.messages" ng-bind="message"></li></ul>
+{% endif %}
 
 {% endblock %}
 
 {% block js %}
+{% if ext.show_local %}
 <script src="/assets/vendor/angular/angular.min.js"></script>
 <script src="/assets/js/controllers/create-user.js"></script>
+{% endif %}
 {% endblock %}

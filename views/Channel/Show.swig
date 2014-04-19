@@ -82,7 +82,7 @@ data-user='{{JSON.stringify(user)}}'
   <div id="controls">
 
     <span class="pull-left">
-      <a href="" class="fa fa-fw fa-heart-o" ng-show="me.logged_in" ut-tooltip="Like this channel"></a>
+      <a href="" class="fa fa-fw" ng-class="{'fa-heart-o': !me.faved, 'fa-heart': me.faved}" ng-click="ec.fav()" ng-show="me.logged_in" ut-tooltip="Like this channel"></a>
     </span>
 
     <span class="center">

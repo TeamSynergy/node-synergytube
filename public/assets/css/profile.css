@@ -1,0 +1,31 @@
+#useravatar{
+  width: 100%;
+  /*max-width: 220px;
+  padding: 0 20px;*/
+}
+.mhelp{
+	color: #9B9B9B;
+	font-size: 1.3em;
+	vertical-align: middle;
+}
+
+#stats{
+	text-align: center;
+}
+
+#stats p{
+	display: inline-block;
+	padding: 0 15px;
+	line-height: 1;
+}
+
+#stats .number{
+	font-weight: bold;
+	font-size: 2em;
+	line-height: 
+}
+
+#stats .desc{
+	font-size: .9em;
+	color: #aaa;
+}

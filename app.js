@@ -152,10 +152,11 @@ app.get('/u/auth/logout', routes.User.DestroySession);
 app.post('/u/set', form({ keepExtensions: true }), routes.User.Set);
 app.get('/u/set', routes.User.RedirectMe);
 app.get('/u/create', routes.User.Create);
+app.get('/u/me', routes.User.RedirectMe);
 app.get('/u/:userid', routes.User.Show);
 
 app.get('/c/create', routes.Channel.Create);
-app.post('/c/create', form({ keepExtensions: true }), routes.Channel.Create_Post);
+app.post('/c/create', form({ keepExtensions: true }), routes.Channel.CreateNew);
 app.get('/c/:channel_string', routes.Channel.Show);
 app.get('/c/:channel_string/admin', routes.Channel.Admin);
 

@@ -2,6 +2,7 @@ var async = require('async');
 var url = require('url');
 var _s = require('underscore.string');
 var avaio = require('avatars.io');
+var moment = require('moment');
 var User = require('../models/User');
 var config = require('../config');
 var utils = require('../lib/utils');
@@ -24,13 +25,6 @@ exports.DestroySession = function(req, res){
   res.redirect('back');
 };
 
-exports.Create = function(req, res){
-  if(!req.isAuthenticated())
-    res.render('User/Create', getData(req));
-  else
-    res.redirect('/')
-};
-
 exports.Show = function(req, res){
   var data = getData(req);
 
@@ -46,6 +40,8 @@ exports.Show = function(req, res){
       return res.render('User/Me', data);
     } else {
       data.user = user;
+      data.joindate = moment(data.user.register_date).fromNow(true)
+      console.log(data.joindate);
       return res.render('User/Profile', data);
     }
   });
@@ -139,6 +135,13 @@ exports.Set = function(req, res){
         res.redirect('/u/' + req.user._id);
     });
   });
+};
+
+exports.Create = function(req, res){
+  if(!req.isAuthenticated())
+    res.render('User/Create', getData(req));
+  else
+    res.redirect('/')
 };
 
 exports.CreateNew = function(req, res){

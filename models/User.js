@@ -65,7 +65,8 @@ var UserSchema = new Schema({
       default: '',
       select: false
     }
-  }
+  },
+  favourites: [{ _id: { type: Schema.Types.ObjectId, ref: 'Channel' }}]
 });
 
 UserSchema.methods.setLocalPassword = function(pwd, cb){
