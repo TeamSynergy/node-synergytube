@@ -40,7 +40,8 @@
     "formidable": "~1.0.14",
     "request": "~2.29.0",
     "underscore.string": "~2.3.3",
-    "moment": "~2.5.1"
+    "moment": "~2.5.1",
+    "mongoose": "~3.8.8"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
