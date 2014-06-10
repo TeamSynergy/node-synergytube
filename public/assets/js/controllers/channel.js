@@ -210,7 +210,10 @@ app.controller('ChannelController', ['$scope', function($scope){
       if($scope.playlist.length === 2)  return $scope.mc.getNext();
 
       var r;
-      while(true){
+      var rounds = 0;
+      // prevent more than 10 tries
+      while(rounds < 10){
+        rounds = rounds + 1;
         r = Math.floor(Math.random() * $scope.playlist.length);
         if($scope.playlist[r]._id !== $scope.mc.current._id)  return $scope.playlist[r];
       }
@@ -340,7 +343,7 @@ app.controller('ChannelController', ['$scope', function($scope){
     inputMessage: {
       text: '',
       submit: function(){
-        if(this.text && this.text.replace(' ', '')){
+        if(this.text && this.text.replace(/\s*/g, '').length > 0){
           socket.emit('chat.send', { content: this.text.trim() });
           this.text = '';
         }
