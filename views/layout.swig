@@ -34,7 +34,7 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{ user.display_name }} <b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li><a href="/u/{{ user._id }}"><i class="fa fa-fw fa-cog"></i> Account Settings</a></li>
-              <li><a href="/u/auth/logout"><i class="fa fa-fw fa-cdog"></i> Log Out</a></li>
+              <li><a href="/u/auth/logout"><i class="fa fa-fw fa-sign-out"></i> Log Out</a></li>
             </ul>
           </li>
           {% else %}{# User not logged in #}
@@ -74,7 +74,7 @@
   </div>
 
   <!-- build:js /assets/js/main.js -->
-  <script src="/assets/vendor/jquery/jquery.min.js"></script>
+  <script src="/assets/vendor/jquery/dist/jquery.min.js"></script>
   <script src="/assets/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
   <!-- endbuild -->
   {% block js %}{% endblock %}

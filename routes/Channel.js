@@ -69,8 +69,18 @@ exports.CreateNew = function(req, res){
       if(fields.url.length < 4 || fields.url.length > 20 || fields.title.length > 20 ||
          fields.description.length > 800 || !/^[a-z0-9\-]*$/.test(fields.url) || fields.description.length < 40)
            return fn('Insufficent arguments.');
+      if(url === 'create')  return fn('Reserved Keyword as URL.')
 
       fn(null, title, descr, url);
+    },
+
+    function channelExists(title, descr, url, fn){
+      Channel.findOne({ short_string: url }, function(err, channel){
+        if(err)  return fn(err);
+        if(channel)  return fn('Another Channel with the same URL already exists.');
+
+        fn(null, title, descr, url);
+      });
     },
 
     function createChannel(title, descr, url, fn){

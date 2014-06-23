@@ -48,8 +48,10 @@ utils.directive('utXmbd', function(){
     });
 
     var updateX = function(){
-      if(!x)
+      if(!x){
         x = element.xmbd();
+        console.log(x);
+      }
       else
         x.clearEvents();
 

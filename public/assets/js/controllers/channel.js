@@ -32,6 +32,15 @@ app.controller('ChannelController', ['$scope', function($scope){
     $scope.me.owner = data.me.owner;
     $scope.me.admin = data.me.admin;
 
+    // is this channel faved?
+    if($scope.me.favourites){
+      $scope.me.favourites.forEach(function(channel){
+        if(channel._id === $('body').data('channel-id')){
+          $scope.me.faved = true;
+        }
+      });
+    }
+
     $scope.mc.plstSort.disabled = !($scope.me.owner || $scope.me.admin);
 
     $scope.ui.inputAdd.show = $scope.playlist.length === 0;
@@ -119,8 +128,9 @@ app.controller('ChannelController', ['$scope', function($scope){
 
     $scope.$apply();
 
-    if(toScroll)
+    if(toScroll){
       $e.animate({ scrollTop: $e[0].scrollHeight}, 200);
+    }
   });
   socket.on('chat.more', function(messages){
     $scope.cc.allLoaded = messages.length === 0;
@@ -154,6 +164,11 @@ app.controller('ChannelController', ['$scope', function($scope){
   socket.on('user.join', function(user){
     console.log('user joined:', user.name);
     $scope.users.push(user);
+    $scope.$apply();
+  });
+
+  socket.on('channel.favourite', function(currentState){
+    $scope.me.faved = currentState;
     $scope.$apply();
   });
 
@@ -368,11 +383,11 @@ app.controller('ChannelController', ['$scope', function($scope){
     scrollTo: 0
   }
 
-  // ec = Etc. Controller <:
-  $scope.ec = {
+  // etc = Etc. Controller <:
+  $scope.etc = {
     fav: function(){
       if($scope.me.logged_in){
-        socket.emit('channel.favourite')
+        socket.emit('channel.favourite', !$scope.me.faved);
       }
     }
   }

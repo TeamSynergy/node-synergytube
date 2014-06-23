@@ -8,7 +8,8 @@
 {% endblock %}
 {% block angularApp %}ChannelController{% endblock %}
 {% block customdata %}
-data-shortstring="{{channel.short_string}}"
+data-shortstring='{{channel.short_string}}'
+data-channel-id='{{channel._id.toString()}}'
 data-user='{{JSON.stringify(user)}}'
 {% endblock %}
 
@@ -82,7 +83,8 @@ data-user='{{JSON.stringify(user)}}'
   <div id="controls">
 
     <span class="pull-left">
-      <a href="" class="fa fa-fw" ng-class="{'fa-heart-o': !me.faved, 'fa-heart': me.faved}" ng-click="ec.fav()" ng-show="me.logged_in" ut-tooltip="Like this channel"></a>
+      <a href="" class="fa fa-fw fa-cog"></a>
+      <a href="" class="fa fa-fw" ng-class="{'fa-heart-o': !me.faved, 'fa-heart': me.faved}" ng-click="etc.fav()" ng-show="me.logged_in" ut-tooltip="Like this channel"></a>
     </span>
 
     <span class="center">
