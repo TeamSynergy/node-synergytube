@@ -1,9 +1,12 @@
 // Edit theses file to your desire and save it as config.js
 module.exports = {
     server: {
-        hostname: "http://localhost",
+        hostname: "localhost",
         port: 80,
-        session_secret: "Your secret may be here!"
+        ip: '0.0.0.0',
+        session_secret: "Your secret may be here!",
+        // set to true if this node.js instance runs behind a reverse-proxy like nginx or varnish
+        reverse_proxy: false,
     },
     mail: {
         service: "gmail",
@@ -35,9 +38,7 @@ module.exports = {
     // http://mongodb.github.io/node-mongodb-native/driver-articles/mongoclient.html#the-url-connection-format
     mongodb: "mongodb://<dbuser>:<dbpassword>@<dbhost>:<dbport>/<dbname>",
     redis: {
-        // redis for session-caching. If you don't want/have redis
-        // just set 'redis' to false or delete it and we'll fall back
-        // to mongodb for sessio-storing. (slow and not supported!)
+        // redis for session-caching.
         host: 'localhost',
         port: 6379
     },
