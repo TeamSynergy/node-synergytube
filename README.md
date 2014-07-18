@@ -5,6 +5,7 @@
 > This is your ultimate sharing place for your newest kitten-videos, your favourite Song or just another Let's Play. Synergytube allows you to create up to 2 own Channels where you can watch videos, livestreams or listen to Music with your friends, strangers or simply everyone. The media will be synced between everyone in the Channel, so everyone gets the same as you do!
 Learn more!
 
+[![Dependency Status](https://gemnasium.com/TeamSynergy/node-synergytube.svg)](https://gemnasium.com/TeamSynergy/node-synergytube)
 
 ## Status
 Working and stable (no observed critical crashes when using this)
@@ -39,7 +40,7 @@ In order to use this you need some prerequisites:
 * [nodejs](http://nodejs.org/) obviously.
 * [bower](http://bower.io/) for package managment: `npm install -g bower`.
 * [Grunt](http://gruntjs.com/) for building, minifying etc.
-* [Redis](http://redis.io/) *optional*, only for session caching.
+* [Redis](http://redis.io/) for session caching.
 * [MongoDB](http://www.mongodb.org/) (you can also use a MongoDB-as-a-Service provider like [mongolab](https://mongolab.com/)).
 * A [facebook application](https://developers.facebook.com/apps) *optional*, for login with facebook.
 * An [avatars.io](https://avatars.io) for avatars obviously.

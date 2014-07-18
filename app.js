@@ -11,6 +11,11 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server, { 'browser client minification': true });
 
+var session = require('express-session');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var methodOverride = require('method-override');
+
 var _s = require('underscore.string');
 var xtend = require('xtend');
 var utils = require('./lib/utils');
@@ -18,7 +23,7 @@ var form = require('./lib/connect-form');
 
 var routes = require('./routes');
 var config = require('./config');
-var sessionstore = require('./lib/sessionstore')(express);
+var sessionstore = require('./lib/sessionstore')(session);
 var sockethandler = require('./lib/sockethandler')(io);
 
 var mongoose = require('mongoose');
@@ -29,39 +34,35 @@ mongoose.connect(config.mongodb, function(){
   console.log('Connected to MongoDB');
 });
 
-server.listen(config.server.port, function(){
-  console.log('Express server listening on port ' + config.server.port);
+server.listen(config.server.port, config.server.ip, function(){
+  console.log('Express server listening on ' + config.server.ip + ':' + config.server.port);
 });
 
-
-app.set('env', config.environment == 'dev' ? 'dev' : 'production');
-app.configure('dev', function(){
-  app.use(express.favicon());
-  app.use(express.errorHandler());
-  app.use(express.logger('dev'));
+if(config.environment === 'dev'){
+  app.use(require('morgan')('short'));
   io.set('log level', 2);
   app.set('view cache', false);
   swig.setDefaults({ cache: false });
-});
+}
 
 app.engine('swig', swig.renderFile);
-app.set('views', './views');
 app.set('view engine', 'swig');
 
-app.use(express.compress());
-app.use(express.methodOverride());
-app.use(express.json());
-app.use(express.urlencoded());
+app.set('trust proxy', !!config.server.reverse_proxy);
+
+if(!config.server.reverse_proxy){
+  app.use(require('compression'));
+}
+app.use(methodOverride());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(flash());
 
 io.set('authorization', passportsocket.authorize(sessionstore.socket));
-app.use(express.cookieParser(config.server.session_secret));
-app.use(express.session(sessionstore.base));
+app.use(cookieParser(config.server.session_secret));
+app.use(session(sessionstore.base));
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.use(app.router);
-app.use(express.static('./public'));
 
 app.disable('x-powered-by');
 
@@ -159,5 +160,7 @@ app.get('/c/create', routes.Channel.Create);
 app.post('/c/create', form({ keepExtensions: true }), routes.Channel.CreateNew);
 app.get('/c/:channel_string', routes.Channel.Show);
 app.get('/c/:channel_string/admin', routes.Channel.Admin);
+
+app.use(express.static('./public'));
 
 io.sockets.on('connection', sockethandler);

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="synergy">
+<html ng-app="synergy" itemscope itemtype="http://schema.org/Article">
 <head>
   <title>{% block title %}Template{% endblock %}</title>
   <meta charset="utf-8">
@@ -10,6 +10,19 @@
   <link rel="stylesheet" href="/assets/vendor/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="/assets/css/main.css">
   <!-- endbuild -->
+
+  <script>
+    window.signInCallback = function(authResult){
+      console.log(authResult);
+      if(authResult.code && authResult.status.method === "PROMPT"){
+        $.post('/u/auth/google/callback', { code: authResult.code })
+          //.done(function(){ location.reload(); });
+      } else if(authResult.error) {
+        console.log(authResult.error);
+      }
+    };
+
+    (function(){var po=document.createElement('script');po.type='text/javascript';po.async=true;po.src='https://plus.google.com/js/client:plusone.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(po,s);})();</script>
   {% block head %}{% endblock %}
 </head>
 <body ng-controller="{% block angularApp %}{% endblock %}" {% block customdata %}{% endblock %}>
@@ -47,7 +60,18 @@
                   <a href="/u/auth/facebook" class="btn form-control btn-facebook"><i class="fa fa-facebook"></i> Facebook</a>
                 {% endif %}
                 {% if ext.show_google %}
-                  <a href="/u/auth/google" class="btn form-control btn-google"><i class="fa fa-google-plus"></i> Google</a>
+                  <div id="signinButton">
+                    <span class="g-signin"
+                      data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email"
+                      data-clientid="678491816076-caaodl53fr7cmeute733dqcbsp6mkpmm.apps.googleusercontent.com"
+                      data-redirecturi="postmessage"
+                      data-accesstype="offline"
+                      data-cookiepolicy="single_host_origin"
+                      data-callback="signInCallback">
+                    </span>
+                  </div>
+                  <div id="result"></div>
+                  <!--<a href="/u/auth/google" class="btn form-control btn-google"><i class="fa fa-google-plus"></i> Google</a>-->
                 {% endif %}
                 <hr>
               {% endif %}
@@ -72,6 +96,8 @@
     {% endif %}
     {% block content %}{% endblock %}
   </div>
+
+
 
   <!-- build:js /assets/js/main.js -->
   <script src="/assets/vendor/jquery/dist/jquery.min.js"></script>

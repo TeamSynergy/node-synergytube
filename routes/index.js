@@ -6,8 +6,10 @@ var async = require('async');
 var getData = utils.getData;
 
 exports.index = function(req, res){
+  
   async.waterfall([
     function getChanneldata(fn){
+
       Channel
         .find()
         .sort('-visitors')

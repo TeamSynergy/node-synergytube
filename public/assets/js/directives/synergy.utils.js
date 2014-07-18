@@ -32,6 +32,7 @@ utils.directive('utXmbd', function(){
     var cueTo;
     var isPlaying;
     var playlistLength;
+    var updateX;
     scope.$watch(attrs.utXmbd, function(i){
       item = i;
       updateX();
@@ -47,13 +48,12 @@ utils.directive('utXmbd', function(){
       }
     });
 
-    var updateX = function(){
+    updateX = function(){
       if(!x){
         x = element.xmbd();
-        console.log(x);
-      }
-      else
+      } else {
         x.clearEvents();
+      }
 
       if(item){
         // calculate our current position in seconds
@@ -71,6 +71,7 @@ utils.directive('utXmbd', function(){
 
         x.on('vPlaying', function(){
           x.unbind('vPlaying');
+          // > 2, means we only scroll if there is a bigger distance than 2 seconds
           if(cueTo > 2){
             x.action('cue', cueTo);
           }
@@ -85,7 +86,7 @@ utils.directive('utXmbd', function(){
       }
     };
 
-  }
+  };
 });
 
 utils.directive('utScrollTop', function(){
@@ -102,7 +103,13 @@ utils.directive('utScrollTop', function(){
       if(raw.scrollTop <= 0)
         scope.$apply(fn);
       });
-    }
+    };
+});
+
+utils.directive('utGooglePlus', function(){
+  return function(scope, element, attrs){
+
+  };
 });
 
 utils.filter('duration', function(){
@@ -121,4 +128,3 @@ utils.filter('pad', function(){
     return pad + val + append || '';
   };
 });
-
