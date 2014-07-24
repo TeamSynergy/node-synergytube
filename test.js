@@ -8,7 +8,6 @@ var io = require('socket.io')(server);
 var bodyParser = require('body-parser');
 var expressCompress = require('compression');
 var session = require('express-session');
-var cookieParser = require('cookie-parser');
 var flash = require('connect-flash');
 
 // 3rd-Party Libraries

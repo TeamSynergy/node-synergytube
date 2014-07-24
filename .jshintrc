@@ -8,10 +8,8 @@
 		"swfobject": true,
 		"angular": true
 	},
-	"camelcase": true,
 	"curly": true,
 	"quotmark": true,
 	"trailing": true,
-	"strict": true,
 	"forin": true
 }

@@ -48,25 +48,19 @@
     "vimeo": "~0.1.7",
     "xtend": "^3.0.0"
   },
-  "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-contrib-uglify": "~0.2.7",
-    "grunt-contrib-jshint": "~0.6.0",
-    "grunt-contrib-cssmin": "~0.7.0",
-    "grunt-contrib-connect": "~0.5.0",
-    "grunt-contrib-copy": "~0.4.1",
-    "grunt-usemin": "~2.0.2",
-    "grunt-contrib-concat": "~0.3.0",
-    "grunt-groundskeeper": "~0.1.6",
-    "grunt-contrib-clean": "~0.5.0"
-  },
   "engines": {
     "node": "0.10.x"
   },
   "scripts": {
-    "start": "node app",
-    "test": "grunt --verbose"
+    "start": "node app"
   },
   "main": "app.js",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^3.8.6",
+    "gulp-changed": "^0.4.0",
+    "gulp-jscs": "^0.6.0",
+    "gulp-jshint": "^1.7.1",
+    "jshint-stylish": "^0.4.0"
+  }
 }

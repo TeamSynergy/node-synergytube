@@ -59,4 +59,4 @@ module.exports = {
         force_sync: false,
         message_queue: 15
     }
-}
+};

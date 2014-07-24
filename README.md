@@ -6,6 +6,7 @@
 Learn more!
 
 [![Dependency Status](https://gemnasium.com/TeamSynergy/node-synergytube.svg)](https://gemnasium.com/TeamSynergy/node-synergytube)
+[![Build Status](https://api.travis-ci.org/TeamSynergy/node-synergytube.svg)](https://api.travis-ci.org/TeamSynergy/node-synergytube.svg)
 
 ## Status
 Working and stable (no observed critical crashes when using this)
