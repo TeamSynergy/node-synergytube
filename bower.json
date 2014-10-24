@@ -22,7 +22,7 @@
     "angular-cookies": "~1.0.7",
     "angular-sanitize": "~1.2.3",
     "jquery": "2.x",
-    "bootstrap": "~3.0.0",
+    "bootstrap": "~3.2.0",
     "xmbd": "0.x",
     "font-awesome": "4.x",
     "momentjs": "~2.4.0",
@@ -30,7 +30,10 @@
     "jquery-ui": "~1.10.3",
     "underscore.string": "~2.3.3",
     "angular-elastic": "~2.3.0",
-    "markdown": "~0.5.0"
+    "markdown": "~0.5.0",
+    "angular-ui-sortable": "~0.13.0",
+    "bootstrap-material-design": "~0.1.1",
+    "velocity": "~1.1.0"
   },
   "resolutions": {
     "angular": "1.2.x"

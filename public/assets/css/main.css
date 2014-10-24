@@ -1,3 +1,7 @@
+.navbar-toggle{
+	float: left;
+}
+
 .dropdown-login{
 	padding: 0 5px;
 	width: 250px;
@@ -8,6 +12,11 @@
 .dropdown-login > h5{
 	color: #999;
 	font-weight: bold;
+}
+
+.btn-facebook,
+.btn-google {
+	width: 100%;
 }
 
 .btn-facebook{

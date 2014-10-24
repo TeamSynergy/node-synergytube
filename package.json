@@ -30,6 +30,7 @@
     "express-session": "^1.6.3",
     "formidable": "~1.0.14",
     "js-scrypt": "~0.X",
+    "method-override": "^2.3.0",
     "moment": "~2.5.1",
     "mongoose": "^3.8.12",
     "morgan": "^1.1.1",

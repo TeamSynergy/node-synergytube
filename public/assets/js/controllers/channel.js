@@ -1,6 +1,6 @@
 var socket = io.connect('/?channel=' + $('body').data('shortstring'));
 
-var app = angular.module('synergy', ['ngAnimate', 'ngSanitize', 'angularMoment', 'synergy.utils', 'ui.sortable']);
+var app = angular.module('synergy', ['synergy.anim', 'ngSanitize', 'angularMoment', 'synergy.utils', 'ui.sortable']);
 app.config(['$interpolateProvider', function($interpolateProvider){
   $interpolateProvider.startSymbol('#{');
   $interpolateProvider.endSymbol('}#');
@@ -10,7 +10,7 @@ app.controller('ChannelController', ['$scope', function($scope){
   $scope.me = $('body').data('user');
   $scope.playlist = [];
   $scope.chat = [];
-  
+
 
   socket.on('channel.init', function(data){
     console.log(data);
@@ -313,15 +313,18 @@ app.controller('ChannelController', ['$scope', function($scope){
         $scope.ui.inputAdd.currentItem = false;
 
         x.getMediaInfo(prs.provider, prs.id, function(err, data){
-          console.log(data);
-          if(err || !data)
+          $scope.ui.inputAdd.working = false;
+
+          console.log(err, data);
+
+          if(err || !data){
             $scope.ui.inputAdd.currentItem = false;
-          else{
+            return;
+          } else {
             $scope.ui.inputAdd.currentItem = data;
             $scope.ui.inputAdd.available = data.available;
           }
 
-          $scope.ui.inputAdd.working = false;
 
           if($scope.mc.plstContains(data.provider, data.id)){
             $scope.ui.inputAdd.warning = 'Duplicate';

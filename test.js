@@ -16,7 +16,7 @@ var passport = require('passport');
 var ioredis = require('socket.io-redis');
 var iopassp = require('passport.socketio');
 var form = require('./lib/connect-form');
-var psphelper = require('./lib/passporthelper');
+var passporthelper = require('./lib/passporthelper');
 var putils = require('./lib/utils.passport');
 var debug = require('debug')('st:server-main');
 
@@ -78,7 +78,7 @@ app.get('/c/:channel_string', routes.Channel.Show);
 app.get('/c/:channel_string/admin', routes.Channel.Admin);
 
 // Passport-Routes and Authentication
-psphelper(config.passport, app);
+passporthelper(config.passport, app);
 
 /*if(config.passport.facebook){
   passport.use(new FacebookStrategy(xtend(config.passport.facebook, {

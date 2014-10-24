@@ -102,7 +102,7 @@ data-user='{{JSON.stringify(user)}}'
   </div>
 
   <!-- Add a new item -->
-  <form id="input-add" class="form-horizontal animate-show-top" ng-show="ui.inputAdd.show" ng-submit="ui.inputAdd.submit()">
+  <form id="input-add" class="form-horizontal velocity-show-vert" ng-show="ui.inputAdd.show" ng-submit="ui.inputAdd.submit()">
 
     <!-- text-input -->
     <div class="input-group">
@@ -111,8 +111,8 @@ data-user='{{JSON.stringify(user)}}'
 
       <input type="text" class="form-control" id="inputAdd" ng-model="ui.inputAdd.text" placeholder="www.youtube.com/v/uN2X1MTwEIc" ng-change="ui.inputAdd.change()">
 
-      <span class="input-group-addon animate-show-right" ng-show="ui.inputAdd.working"><i class="fa fa-cog fa-spin"></i></span>
-      
+      <span class="input-group-addon velocity-show-horiz" ng-show="ui.inputAdd.working"><i class="fa fa-cog fa-spin"></i></span>
+
       <span class="input-group-btn">
         <input type="submit" class="btn btn-primary" value="Add!" ng-disabled="!ui.inputAdd.currentItem || !ui.inputAdd.available">
       </span>
@@ -121,7 +121,7 @@ data-user='{{JSON.stringify(user)}}'
 
 
     <!-- info-bar -->
-    <div class="info animate-show-top" ng-show="ui.inputAdd.currentItem" ng-class="{'success':ui.inputAdd.currentItem && !ui.inputAdd.warning, 'warning': ui.inputAdd.warning}">
+    <div class="info velocity-show-vert" ng-show="ui.inputAdd.currentItem" ng-class="{'success':ui.inputAdd.currentItem && !ui.inputAdd.warning, 'warning': ui.inputAdd.warning}">
 
       <span class="success" ng-show="ui.inputAdd.currentItem && !ui.inputAdd.warning"><i class="fa fa-check"></i></span>
       <span class="warning" ng-show="ui.inputAdd.warning"><i class="fa fa-warning"></i> <span ng-bind="ui.inputAdd.warning"></span></span>
@@ -139,7 +139,7 @@ data-user='{{JSON.stringify(user)}}'
   </form>
 
   <!-- Search Item -->
-  <form id="input-search" class="form-horizontal animate-show-top" ng-show="ui.inputSearch.show">
+  <form id="input-search" class="form-horizontal velocity-show-vert" ng-show="ui.inputSearch.show">
     <input type="text" class="form-control" id="inputSearch" ng-model="ui.inputSearch.text" placeholder="kitten, funny, pony">
   </form>
 
@@ -180,6 +180,8 @@ data-user='{{JSON.stringify(user)}}'
 <script src="/socket.io/socket.io.js"></script>
 <script src="/assets/vendor/angular/angular.min.js"></script>
 <!-- build:js /assets/js/angular.contrib.js -->
+<script src="/assets/vendor/velocity/velocity.min.js"></script>
+<script src="/assets/vendor/velocity/velocity.ui.min.js"></script>
 <script src="/assets/vendor/angular-animate/angular-animate.min.js"></script>
 <script src="/assets/vendor/angular-sanitize/angular-sanitize.min.js"></script>
 <!-- endbuild -->
@@ -189,8 +191,9 @@ data-user='{{JSON.stringify(user)}}'
 <script src="/assets/vendor/jquery-ui/ui/minified/jquery-ui.min.js"></script>
 <script src="/assets/vendor/swfobject/swfobject/swfobject.js"></script>
 <script src="/assets/vendor/xmbd/src/xmbd.js"></script>
-<script src="/assets/js/directives/ui-sortable/src/sortable.js"></script>
+<script src="/assets/vendor/angular-ui-sortable/sortable.js"></script>
 <script src="/assets/js/controllers/channel.js"></script>
 <!-- endbuild -->
 <script src="/assets/js/directives/synergy.utils.js"></script>
+<script src="/assets/js/directives/synergy.anim.js"></script>
 {% endblock %}

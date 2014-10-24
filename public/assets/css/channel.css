@@ -230,7 +230,7 @@ img{
   border-right: 1px solid #BCE8F1;
 }
 
-.animate-show-right,
+/*.animate-show-right,
 .animate-show-top{
   -webkit-transition: all 230ms ease-in;
      -moz-transition: all 230ms ease-in;
@@ -240,8 +240,7 @@ img{
 }
 
 .animate-show-top{
-  overflow-y: hidden;
-  max-height: 500px;
+    height: initial;
 }
 .animate-show-right{
   overflow-x: hidden;
@@ -259,13 +258,14 @@ img{
   display:block!important;
 }
 .animate-show-top.ng-hide{
-  max-height: 0;
-  line-height: 0;
+  height: 0;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 }
 
 .animate-show-right.ng-hide{
   max-width: 0;
-}
+}*/
 
 #playlist tr{
   border: 1px solid #ddd;
